@@ -33,3 +33,8 @@ class CreateRoomViewSet(viewsets.ModelViewSet):
 
     queryset = Room.objects.all()
     serializer_class = ListRoomSerializer
+
+class PartyViewSet(viewsets.ModelViewSet):
+
+    queryset = Party.objects.all()
+    serializer_class = PartySerializer

@@ -37,7 +37,7 @@ class PlayerDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Player
-        fields = ('player_name','player_photo')
+        fields = ('id_player','player_name','player_photo')
 
 class PlayerSerializer(serializers.ModelSerializer):
 
@@ -71,3 +71,11 @@ class ListRoomSerializer(serializers.ModelSerializer):
                     'required_age_max','required_slot','room_status','room_created',
                     'room_updated'
                  )
+
+class PartySerializer(serializers.ModelSerializer):
+
+    id_player = PlayerDetailSerializer()
+
+    class Meta:
+        model = Party
+        fields = ('id_player','party_name')

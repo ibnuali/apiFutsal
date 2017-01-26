@@ -10,6 +10,7 @@ router.register(r'province,', views.ProvinceViewSet)
 router.register(r'player,', views.PlayerViewSet)
 router.register(r'field,', views.FieldLocViewSet)
 router.register(r'room', views.CreateRoomViewSet)
+router.register(r'party', views.PartyViewSet)
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
