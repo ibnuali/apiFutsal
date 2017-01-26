@@ -9,7 +9,8 @@ router.register(r'country', views.CountryViewSet)
 router.register(r'province,', views.ProvinceViewSet)
 router.register(r'player,', views.PlayerViewSet)
 router.register(r'field,', views.FieldLocViewSet)
-router.register(r'createroom,', views.CreateRoomViewSet)
+router.register(r'room', views.CreateRoomViewSet)
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^api/', include(router.urls)),

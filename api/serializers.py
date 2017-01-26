@@ -20,6 +20,13 @@ class ProvinceSerializer(serializers.ModelSerializer):
         fields = ('id_province','name_province')
         depth = 1
 
+class District(serializers.ModelSerializer):
+
+     class Meta:
+        model = Province
+        fields = '__all__'
+        depth = 1
+        
 class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -34,26 +41,21 @@ class FieldLocSerializer(serializers.ModelSerializer):
 
 class CreateRoomSerializer(serializers.ModelSerializer):
 
-    # Player = serializers.SlugRelatedField(
-    #     many=True,
-    #     read_only=True,
-    #     slug_field='player_name'
-    #  )
+    class Meta:
+        model = Room
+        fields = '__all__'
 
-    # field = serializers.SlugRelatedField(
-    #     many=True,
-    #     read_only=True,
-    #     slug_field='name_field'
-    #  )
-    Player = PlayerSerializer(source='id_player', read_only=True)
+class ListRoomSerializer(serializers.ModelSerializer):
+
+    id_player = PlayerSerializer()
+    id_field = FieldLocSerializer()
 
     class Meta:
         model = Room
         fields = (
-                    'Player','room_name','room_stadium',
+                    'id_player','id_field','room_name','room_stadium',
                     'room_address','room_duration','required_level_min',
                     'required_level_max','required_gender','required_age_min',
                     'required_age_max','required_slot','room_status','room_created',
                     'room_updated'
                  )
-

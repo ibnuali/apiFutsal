@@ -32,4 +32,4 @@ class FieldLocViewSet(viewsets.ModelViewSet):
 class CreateRoomViewSet(viewsets.ModelViewSet):
 
     queryset = Room.objects.all()
-    serializer_class = CreateRoomSerializer
+    serializer_class = ListRoomSerializer
