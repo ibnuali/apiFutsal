@@ -26,7 +26,19 @@ class District(serializers.ModelSerializer):
         model = Province
         fields = '__all__'
         depth = 1
-        
+
+class GenderSerializer(serializers.ModelSerializer):
+
+     class Meta:
+        model = Genders
+        fields = '__all__'
+
+class PlayerDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Player
+        fields = ('player_name','player_photo')
+
 class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -47,7 +59,7 @@ class CreateRoomSerializer(serializers.ModelSerializer):
 
 class ListRoomSerializer(serializers.ModelSerializer):
 
-    id_player = PlayerSerializer()
+    id_player = PlayerDetailSerializer()
     id_field = FieldLocSerializer()
 
     class Meta:
