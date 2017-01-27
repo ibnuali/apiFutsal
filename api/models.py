@@ -76,19 +76,6 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
-class Chat(models.Model):
-    id_chat = models.AutoField(primary_key=True)
-    id_player = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player')
-    id_room = models.ForeignKey('Room', models.DO_NOTHING, db_column='id_room', blank=True, null=True)
-    id_party = models.ForeignKey('Party', models.DO_NOTHING, db_column='id_party', blank=True, null=True)
-    id_friend = models.ForeignKey('Friend', models.DO_NOTHING, db_column='id_friend', blank=True, null=True)
-    chat_type = models.IntegerField(blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'chat'
-
-
 class City(models.Model):
     id_city = models.CharField(primary_key=True, max_length=4)
     id_province = models.ForeignKey('Province', models.DO_NOTHING, db_column='id_province')
@@ -162,22 +149,43 @@ class DjangoSession(models.Model):
         db_table = 'django_session'
 
 
-class FieldLocation(models.Model):
+class Field(models.Model):
     id_field = models.AutoField(primary_key=True)
-    id_district = models.ForeignKey(District, models.DO_NOTHING, db_column='id_district')
-    name_field = models.CharField(max_length=40)
+    name_field = models.CharField(max_length=30)
     latitude_field = models.FloatField()
     longitude_field = models.FloatField()
+    description_field = models.CharField(max_length=100)
+
+    class Meta:
+        managed = False
+        db_table = 'field'
+
+
+class FieldLocation(models.Model):
+    id_field_location = models.AutoField(primary_key=True)
+    id_district = models.ForeignKey(District, models.DO_NOTHING, db_column='id_district')
+    name_field_location = models.CharField(max_length=40)
+    latitude_field_location = models.FloatField()
+    longitude_field_location = models.FloatField()
 
     class Meta:
         managed = False
         db_table = 'field_location'
 
 
+class FieldPhotos(models.Model):
+    id_field = models.ForeignKey(Field, models.DO_NOTHING, db_column='id_field', primary_key=True)
+    field_photos = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'field_photos'
+
+
 class Friend(models.Model):
     id_friend = models.AutoField(primary_key=True)
-    id_player1 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player1' , related_name='me')
-    id_player2 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player2', related_name='you')
+    id_player1 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player1',related_name='player1')
+    id_player2 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player2',related_name='player2')
     friend_status = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -333,14 +341,15 @@ class RequiredPositions(models.Model):
 class Room(models.Model):
     id_room = models.AutoField(primary_key=True)
     id_player = models.ForeignKey(Player, models.DO_NOTHING, db_column='id_player')
-    id_field = models.ForeignKey(FieldLocation, models.DO_NOTHING, db_column='id_field')
+    required_gender = models.ForeignKey(Genders, models.DO_NOTHING, db_column='required_gender', blank=True, null=True)
+    id_field_location = models.ForeignKey(FieldLocation, models.DO_NOTHING, db_column='id_field_location', blank=True, null=True)
     room_name = models.CharField(max_length=50)
     room_stadium = models.CharField(max_length=40)
     room_address = models.CharField(max_length=80)
+    room_date = models.DateTimeField()
     room_duration = models.TimeField()
     required_level_min = models.IntegerField(blank=True, null=True)
     required_level_max = models.IntegerField(blank=True, null=True)
-    required_gender = models.IntegerField()
     required_age_min = models.IntegerField(blank=True, null=True)
     required_age_max = models.IntegerField(blank=True, null=True)
     required_slot = models.IntegerField()
@@ -351,3 +360,16 @@ class Room(models.Model):
     class Meta:
         managed = False
         db_table = 'room'
+
+
+class Store(models.Model):
+    id_store = models.AutoField(primary_key=True)
+    name_store = models.CharField(max_length=40)
+    description_store = models.CharField(max_length=100)
+    contact_store = models.CharField(max_length=14)
+    link_store = models.CharField(max_length=40)
+    photo_store = models.CharField(max_length=50)
+
+    class Meta:
+        managed = False
+        db_table = 'store'

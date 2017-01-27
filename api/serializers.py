@@ -5,7 +5,6 @@ class CitySerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = '__all__'
-        depth = 2
 
 class CountrySerializer(serializers.ModelSerializer):
     class Meta:
@@ -17,32 +16,42 @@ class ProvinceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Province
-        fields = ('id_province','name_province')
-        depth = 1
+        fields = '__all__'
 
 class District(serializers.ModelSerializer):
 
      class Meta:
         model = Province
         fields = '__all__'
-        depth = 1
-
+     
 class GenderSerializer(serializers.ModelSerializer):
 
      class Meta:
         model = Genders
         fields = '__all__'
 
-class PlayerDetailSerializer(serializers.ModelSerializer):
+class PositionsSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Player
-        fields = ('id_player','player_name','player_photo')
+        model = Positions
+        fields = '__all__'
 
 class PlayerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Player
+        fields = '__all__'
+
+class PlayerPositionSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = PlayerPosition
+        fields = '__all__'
+
+class FieldSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Field
         fields = '__all__'
 
 class FieldLocSerializer(serializers.ModelSerializer):
@@ -51,21 +60,26 @@ class FieldLocSerializer(serializers.ModelSerializer):
         model = FieldLocation
         fields = '__all__'
 
-class CreateRoomSerializer(serializers.ModelSerializer):
+class FieldPhotoSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = Room
+        model = FieldPhotos
+        fields = '__all__'
+
+class FieldSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Field
         fields = '__all__'
 
 class ListRoomSerializer(serializers.ModelSerializer):
 
-    id_player = PlayerDetailSerializer()
-    id_field = FieldLocSerializer()
+    player = serializers.PrimaryKeyRelatedField(many=True, read_only=True,source='id_player')
 
     class Meta:
         model = Room
         fields = (
-                    'id_player','id_field','room_name','room_stadium',
+                    'player','id_field_location','room_name','room_stadium',
                     'room_address','room_duration','required_level_min',
                     'required_level_max','required_gender','required_age_min',
                     'required_age_max','required_slot','room_status','room_created',
@@ -74,8 +88,67 @@ class ListRoomSerializer(serializers.ModelSerializer):
 
 class PartySerializer(serializers.ModelSerializer):
 
-    id_player = PlayerDetailSerializer()
+    id_player = PlayerSerializer()
 
     class Meta:
         model = Party
-        fields = ('id_player','party_name')
+        fields = '__all__'
+
+class FriendSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Friend
+        fields = '__all__'
+
+class JoinPartySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = JoinParty
+        fields = '__all__'
+
+
+class LevelSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Level
+        fields = '__all__'
+
+class LevelHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = LevelHistory
+        fields = '__all__'
+
+class JoinRoomSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = JoinRoom
+        fields = '__all__'
+
+
+class RatingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Rating
+        fields = '__all__'
+
+
+class RatingHistorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RatingHistory
+        fields = '__all__'
+
+class RequiredPositionsSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = RequiredPositions
+        fields = '__all__'
+
+class StoreSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Store
+        fields = '__all__'
+
+
