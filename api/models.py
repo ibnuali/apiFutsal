@@ -76,6 +76,19 @@ class AuthUserUserPermissions(models.Model):
         unique_together = (('user', 'permission'),)
 
 
+class Chat(models.Model):
+    id_chat = models.AutoField(primary_key=True)
+    id_player = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player')
+    id_room = models.ForeignKey('Room', models.DO_NOTHING, db_column='id_room', blank=True, null=True)
+    id_friend = models.ForeignKey('Friend', models.DO_NOTHING, db_column='id_friend', blank=True, null=True)
+    id_party = models.ForeignKey('Party', models.DO_NOTHING, db_column='id_party', blank=True, null=True)
+    chat_type = models.IntegerField(blank=True, null=True)
+
+    class Meta:
+        managed = False
+        db_table = 'chat'
+
+
 class City(models.Model):
     id_city = models.CharField(primary_key=True, max_length=4)
     id_province = models.ForeignKey('Province', models.DO_NOTHING, db_column='id_province')
@@ -184,8 +197,8 @@ class FieldPhotos(models.Model):
 
 class Friend(models.Model):
     id_friend = models.AutoField(primary_key=True)
-    id_player1 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player1',related_name='player1')
-    id_player2 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player2',related_name='player2')
+    id_player1 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player1', related_name="id_player1")
+    id_player2 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player2', related_name="id_player2")
     friend_status = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -262,10 +275,11 @@ class Player(models.Model):
     id_player = models.AutoField(primary_key=True)
     id_district = models.ForeignKey(District, models.DO_NOTHING, db_column='id_district', blank=True, null=True)
     id_gender = models.ForeignKey(Genders, models.DO_NOTHING, db_column='id_gender')
-    player_name = models.CharField(max_length=40)
+    player_first_name = models.CharField(max_length=20)
+    player_last_name = models.CharField(max_length=20)
     player_photo = models.CharField(max_length=30)
-    player_birth_place = models.CharField(max_length=30, blank=True, null=True)
-    player_birth_date = models.DateField(blank=True, null=True)
+    player_birth_place = models.CharField(max_length=30)
+    player_birth_date = models.DateField()
     player_address = models.CharField(max_length=80, blank=True, null=True)
     player_handphone = models.CharField(max_length=13)
     player_email = models.CharField(max_length=50)

@@ -1,102 +1,88 @@
 from django.shortcuts import render
-from rest_framework import viewsets
+from rest_framework import generics
 from .serializers import *
 from .models import *
+from django.utils import timezone
 
-class CityViewSet(viewsets.ModelViewSet):
-
+class CityListView(generics.ListAPIView):
     queryset = City.objects.all()
     serializer_class = CitySerializer
 
-
-class CountryViewSet(viewsets.ModelViewSet):
-
+class CountryListView(generics.ListAPIView):
     queryset = Country.objects.all()
     serializer_class = CountrySerializer
 
-class ProvinceViewSet(viewsets.ModelViewSet):
-
+class ProvinceListView(generics.ListAPIView):
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
 
-class PlayerViewSet(viewsets.ModelViewSet):
+class CreatePlayerView(generics.CreateAPIView):
+    serializer_class = PlayerSerializer
+    def perform_create(self, serializer):
+        serializer.save(created_at=timezone.now(),player_photo="urldefault")
 
+class UpdatePlayerView(generics.RetrieveUpdateAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
+    def perform_update(self, serializer):
+        serializer.save(updated_at=timezone.now())
 
-class FieldLocViewSet(viewsets.ModelViewSet):
-
+class FieldLocList(generics.ListAPIView):
     queryset = FieldLocation.objects.all()
     serializer_class = FieldLocSerializer
 
-class FieldViewSet(viewsets.ModelViewSet):
-
+class FieldList(generics.ListAPIView):
     queryset = Field.objects.all()
     serializer_class = FieldSerializer
 
-class FieldPhotosViewSet(viewsets.ModelViewSet):
-
+class FieldPhotosList(generics.ListAPIView):
     queryset = FieldPhotos.objects.all()
     serializer_class = FieldPhotoSerializer
 
-class CreateRoomViewSet(viewsets.ModelViewSet):
-
+class CreateRoomList(generics.ListAPIView):
     queryset = Room.objects.all()
     serializer_class = ListRoomSerializer
 
-class PartyViewSet(viewsets.ModelViewSet):
-
+class PartyList(generics.ListAPIView):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
 
-class FriendViewSet(viewsets.ModelViewSet):
-
+class FriendList(generics.ListAPIView):
     queryset = Friend.objects.all()
     serializer_class = FriendSerializer
 
-class JoinPartyViewSet(viewsets.ModelViewSet):
-
+class JoinPartyList(generics.ListAPIView):
     queryset = JoinParty.objects.all()
     serializer_class = JoinPartySerializer
 
-class LevelViewSet(viewsets.ModelViewSet):
-
+class LevelList(generics.ListAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
 
-class LevelHistoryViewSet(viewsets.ModelViewSet):
-
+class LevelHistoryList(generics.ListAPIView):
     queryset = LevelHistory.objects.all()
     serializer_class = LevelHistorySerializer
 
-class LevelViewSet(viewsets.ModelViewSet):
-
+class LevelList(generics.ListAPIView):
     queryset = Level.objects.all()
     serializer_class = LevelSerializer
 
-class LevelHistoryViewSet(viewsets.ModelViewSet):
-
+class LevelHistoryList(generics.ListAPIView):
     queryset = LevelHistory.objects.all()
     serializer_class = LevelHistorySerializer
 
-class RatingHistoryViewSet(viewsets.ModelViewSet):
-
+class RatingHistoryList(generics.ListAPIView):
     queryset = RatingHistory.objects.all()
     serializer_class = RatingHistorySerializer
 
-class FriendViewSet(viewsets.ModelViewSet):
-
+class FriendList(generics.ListAPIView):
     queryset = Friend.objects.all()
     serializer_class = FriendSerializer
 
-class RequiredPositionsViewSet(viewsets.ModelViewSet):
-
+class RequiredPositionsList(generics.ListAPIView):
     queryset = RequiredPositions.objects.all()
     serializer_class = RequiredPositionsSerializer
 
-class StoreViewSet(viewsets.ModelViewSet):
-
+class StoreList(generics.ListAPIView):
     queryset = Friend.objects.all()
     serializer_class = StoreSerializer
-
-
