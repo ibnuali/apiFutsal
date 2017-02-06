@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 05, 2017 at 09:17 AM
+-- Generation Time: Feb 06, 2017 at 03:12 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.2
 
@@ -195,7 +195,7 @@ CREATE TABLE `auth_user` (
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$30000$SCwKMJelDhgi$SYVmgJcJsR75QjNWRmMsALRyrhzNO8tXAbyep/odK6M=', '2017-02-05 07:59:53.441283', 1, 'Fadhlan', '', '', 'fridhwanallah@gmail.com', 1, 1, '2017-02-05 05:36:51.688590');
+(1, 'pbkdf2_sha256$30000$SCwKMJelDhgi$SYVmgJcJsR75QjNWRmMsALRyrhzNO8tXAbyep/odK6M=', '2017-02-05 14:02:46.590146', 1, 'Fadhlan', '', '', 'fridhwanallah@gmail.com', 1, 1, '2017-02-05 05:36:51.688590');
 
 -- --------------------------------------------------------
 
@@ -7794,6 +7794,7 @@ CREATE TABLE `django_session` (
 INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALUES
 ('5i6i2ekayeew37n0hxmv6d8pzsq19148', 'MTc3ZGRlMzM3MTNlYjkxYWU2NzdiZjlhY2IwOWFkZWU1ZWMxY2ZlMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEiLCJfYXV0aF91c2VyX2hhc2giOiI1ZmM0OGJmZjRkN2ViYWMxYjYxYmI5MWQwZDQ0ZWE5ZDU5NmRlN2FkIn0=', '2017-02-19 07:59:53.486118'),
 ('8xlvoalwn1wq5oaon98bht2rmrbmhxuv', 'MTc3ZGRlMzM3MTNlYjkxYWU2NzdiZjlhY2IwOWFkZWU1ZWMxY2ZlMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEiLCJfYXV0aF91c2VyX2hhc2giOiI1ZmM0OGJmZjRkN2ViYWMxYjYxYmI5MWQwZDQ0ZWE5ZDU5NmRlN2FkIn0=', '2017-02-19 05:37:29.159153'),
+('9e8e7nd9ek8ip9t549rkjvqvdwbuszlp', 'YjExMmZjY2FmNTUxOTM2YWI1ZTk0N2EyZDYwYTQ1NGE1MzNhMzFmZjp7Il9hdXRoX3VzZXJfaGFzaCI6IjVmYzQ4YmZmNGQ3ZWJhYzFiNjFiYjkxZDBkNDRlYTlkNTk2ZGU3YWQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=', '2017-02-19 14:02:46.652631'),
 ('9y50tsuag1k9cocld9fqtsp24tnpmdsg', 'OTUyNTA5ZjYwYzNmNWY3MzE1NzJiOWU2MDdmMTE3YzE5ZGJmYjE2Mzp7Il9hdXRoX3VzZXJfaGFzaCI6IjVmYzQ4YmZmNGQ3ZWJhYzFiNjFiYjkxZDBkNDRlYTlkNTk2ZGU3YWQiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=', '2017-02-19 07:15:28.054051');
 
 -- --------------------------------------------------------
@@ -7847,6 +7848,14 @@ CREATE TABLE `friend` (
   `id_player2` int(11) NOT NULL,
   `friend_status` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `friend`
+--
+
+INSERT INTO `friend` (`id_friend`, `id_player1`, `id_player2`, `friend_status`) VALUES
+(1, 7, 8, NULL),
+(2, 8, 7, NULL);
 
 -- --------------------------------------------------------
 
@@ -7938,12 +7947,21 @@ INSERT INTO `level` (`id_level`, `score_level`, `score_exp`) VALUES
 --
 
 CREATE TABLE `level_history` (
-  `id_level_history` int(11) NOT NULL AUTO_INCREMENT,
+  `id_level_history` int(11) NOT NULL,
   `id_level` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
-  `date_level_history` datetime NOT NULL,
+  `date_level_history` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `player_exp` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `level_history`
+--
+
+INSERT INTO `level_history` (`id_level_history`, `id_level`, `id_player`, `date_level_history`, `player_exp`) VALUES
+(5, 1, 7, '2017-02-05 04:59:10', 0),
+(6, 1, 8, '2017-02-05 21:58:13', 0),
+(7, 1, 9, '2017-02-05 22:21:45', 0);
 
 -- --------------------------------------------------------
 
@@ -7972,15 +7990,15 @@ CREATE TABLE `player` (
   `player_first_name` varchar(20) NOT NULL,
   `player_last_name` varchar(20) NOT NULL,
   `player_photo` varchar(30) NOT NULL DEFAULT 'urldefault',
-  `player_birth_place` varchar(30) DEFAULT NULL,
-  `player_birth_date` date DEFAULT NULL,
+  `player_birth_place` varchar(30) NOT NULL,
+  `player_birth_date` date NOT NULL,
   `player_address` varchar(80) DEFAULT NULL,
   `player_handphone` varchar(13) NOT NULL,
   `player_email` varchar(50) NOT NULL,
   `player_username` varchar(30) NOT NULL,
   `player_password` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime DEFAULT NULL
+  `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -7988,7 +8006,20 @@ CREATE TABLE `player` (
 --
 
 INSERT INTO `player` (`id_player`, `id_district`, `id_gender`, `player_first_name`, `player_last_name`, `player_photo`, `player_birth_place`, `player_birth_date`, `player_address`, `player_handphone`, `player_email`, `player_username`, `player_password`, `created_at`, `updated_at`) VALUES
-(1, NULL, 1, 'Fadhlan Ridhwanallah', '', 'default', 'Bandung', '1995-08-04', NULL, '085749216686', 'fridhwanallah@gmail.com', 'fadhlanrwn', 'gghhjjkk99', '2017-02-05 08:12:33', NULL);
+(7, NULL, 1, 'Fadhlan', 'Ridhwanallah', 'urldefault', 'Bandung', '1995-08-04', NULL, '085749216686', 'fridhwanallah@gmail.com', 'fadhlanrwn', 'gghhjjkk99', '2017-02-05 04:59:10', NULL),
+(8, NULL, 1, 'Jays', 'Maulana', 'urldefault', 'Bandung', '1994-05-25', NULL, '089756473832', 'jaysmm@gmail.com', 'jaysmm', 'jaysmm123', '2017-02-05 21:58:13', NULL),
+(9, NULL, 1, 'Maulana', 'Kahfi', 'urldefault', 'Batujajar', '1994-05-20', NULL, '0867574786', 'maulanakampret@gmail.com', 'maulllzzzz', 'maulana123', '2017-02-06 06:21:45', NULL);
+
+--
+-- Triggers `player`
+--
+DELIMITER $$
+CREATE TRIGGER `insert_player_data` AFTER INSERT ON `player` FOR EACH ROW BEGIN
+INSERT INTO level_history VALUES(0,1,NEW.id_player,NOW(),0);
+INSERT INTO rating_history VALUES(0,NEW.id_player,1,NOW());
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -8001,6 +8032,14 @@ CREATE TABLE `player_position` (
   `id_position` int(11) NOT NULL,
   `id_player` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `player_position`
+--
+
+INSERT INTO `player_position` (`id_player_position`, `id_position`, `id_player`) VALUES
+(1, 2, 7),
+(2, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -8600,11 +8639,20 @@ INSERT INTO `rating` (`id_rating`, `score_rating`) VALUES
 --
 
 CREATE TABLE `rating_history` (
-  `id_rating_history` int(11) NOT NULL AUTO_INCREMENT,
+  `id_rating_history` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `id_rating` int(11) NOT NULL,
-  `date_rating_history` datetime NOT NULL
+  `date_rating_history` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `rating_history`
+--
+
+INSERT INTO `rating_history` (`id_rating_history`, `id_player`, `id_rating`, `date_rating_history`) VALUES
+(1, 7, 1, '2017-02-05 04:59:10'),
+(2, 8, 1, '2017-02-05 21:58:13'),
+(3, 9, 1, '2017-02-05 22:21:45');
 
 -- --------------------------------------------------------
 
@@ -8841,6 +8889,7 @@ ALTER TABLE `party`
 --
 ALTER TABLE `player`
   ADD PRIMARY KEY (`id_player`),
+  ADD UNIQUE KEY `player_username` (`player_username`),
   ADD KEY `FK_distict_player_fk` (`id_district`),
   ADD KEY `FK_genders_player_fk` (`id_gender`);
 
@@ -8975,7 +9024,7 @@ ALTER TABLE `field_location`
 -- AUTO_INCREMENT for table `friend`
 --
 ALTER TABLE `friend`
-  MODIFY `id_friend` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_friend` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `genders`
 --
@@ -8997,6 +9046,11 @@ ALTER TABLE `join_room`
 ALTER TABLE `level`
   MODIFY `id_level` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
+-- AUTO_INCREMENT for table `level_history`
+--
+ALTER TABLE `level_history`
+  MODIFY `id_level_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+--
 -- AUTO_INCREMENT for table `party`
 --
 ALTER TABLE `party`
@@ -9005,12 +9059,12 @@ ALTER TABLE `party`
 -- AUTO_INCREMENT for table `player`
 --
 ALTER TABLE `player`
-  MODIFY `id_player` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_player` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `player_position`
 --
 ALTER TABLE `player_position`
-  MODIFY `id_player_position` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_player_position` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `positions`
 --
@@ -9025,7 +9079,7 @@ ALTER TABLE `rating`
 -- AUTO_INCREMENT for table `rating_history`
 --
 ALTER TABLE `rating_history`
-  MODIFY `id_rating_history` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_rating_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `required_positions`
 --
