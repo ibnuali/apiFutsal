@@ -27,9 +27,17 @@ class CreatePlayerView(views.APIView):
         else:
             return Response(serializers.errors)
 
-class UpdatePlayerView(generics.RetrieveAPIView):
-    queryset = Player.objects.all()
-    serializer_class = PlayerDetailSerializer
+class SignInPlayerView(views.APIView):
+    def get(self, request, username, password):
+        try:
+            player = Player.SignIn(username,password)
+        except Snippet.DoesNotExist:
+            return HttpResponse(status=404)
+
+        print(player.values('id_player'))
+        serializer = PlayerDetailSerializer(player, many=True)
+        return Response(serializer.data)
+
     def perform_update(self, serializer):
         serializer.save(updated_at=timezone.now())
 

@@ -370,8 +370,12 @@ class Player(models.Model):
     player_positions = property(__player_positions)
     player_join_rooms = property(__player_join_rooms)
     player_rooms = property(__player_rooms)
-
     player_friends = property(__player_friends)
+
+    def SignIn(username, password):
+        queryset = Player.objects.filter(player_username=username).filter(player_password=password)
+        return queryset
+
 
     class Meta:
         managed = False
