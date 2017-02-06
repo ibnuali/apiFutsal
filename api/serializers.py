@@ -36,14 +36,20 @@ class SignupSerializer(serializers.ModelSerializer):
         model = Player
         exclude = ('id_district','player_photo','player_address','created_at','updated_at')
 
+class PlayerPositionListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Positions
+        fields = '__all__'
+
 class PlayerSerializer(serializers.ModelSerializer):
     player_gender = GenderSerializer(read_only=True,source='id_gender')
+    player_positions = PlayerPositionListSerializer(many=True,read_only=True)
     class Meta:
         model = Player
         fields = ('id_player','player_first_name','player_last_name','player_gender',
-        'player_photo','player_level','player_exp','player_rating','player_reviewed')
+        'player_photo','player_level','player_exp','player_rating','player_reviewed','player_positions',)
 
-class UpdatePlayerSerializer(serializers.ModelSerializer):
+class PlayerDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
         exclude = ('created_at','updated_at')
@@ -59,11 +65,6 @@ class PlayerFriendListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Friend
         exclude = ('id_player1',)
-
-class PlayerPositionListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Positions
-        fields = '__all__'
 
 class PlayerRoomSerializer(serializers.ModelSerializer):
     class Meta:

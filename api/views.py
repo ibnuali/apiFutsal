@@ -31,18 +31,30 @@ class SignInPlayerView(views.APIView):
     def get(self, request, username, password):
         try:
             player = Player.SignIn(username,password)
-        except Snippet.DoesNotExist:
+        except player.DoesNotExist:
             return HttpResponse(status=404)
-
-        print(player.values('id_player'))
         serializer = PlayerDetailSerializer(player, many=True)
         return Response(serializer.data)
 
 class UpdatePlayerView(generics.RetrieveUpdateAPIView):
     queryset = Player.objects.all()
-    serializer_class = UpdatePlayerSerializer
+    serializer_class = PlayerDataSerializer
+
     def perform_update(self, serializer):
         serializer.save(updated_at=timezone.now())
+
+class GetPlayerView(views.APIView):
+    def get(self, request, username):
+        try:
+            player = Player.objects.filter(player_username = username)
+        except player.DoesNotExist:
+            return HttpResponse(status=404)
+        serializer = PlayerSerializer(player, many=True)
+        return Response(serializer.data)
+
+class FriendList(generics.ListCreateAPIView):
+    queryset = Friend.objects.all()
+    serializer_class = FriendListSerializer
 
 class FieldLocList(generics.ListAPIView):
     queryset = FieldLocation.objects.all()
@@ -87,10 +99,6 @@ class LevelHistoryList(generics.ListAPIView):
 class RatingHistoryList(generics.ListAPIView):
     queryset = RatingHistory.objects.all()
     serializer_class = RatingHistorySerializer
-
-class FriendList(generics.ListAPIView):
-    queryset = Friend.objects.all()
-    serializer_class = FriendListSerializer
 
 class RequiredPositionsList(generics.ListAPIView):
     queryset = RequiredPositions.objects.all()
