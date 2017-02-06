@@ -43,6 +43,11 @@ class PlayerSerializer(serializers.ModelSerializer):
         fields = ('id_player','player_first_name','player_last_name','player_gender',
         'player_photo','player_level','player_exp','player_rating','player_reviewed')
 
+class UpdatePlayerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        exclude = ('created_at','updated_at')
+
 class ChatFriendSerializer(serializers.ModelSerializer):
     class Meta:
         model = Chat

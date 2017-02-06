@@ -9,7 +9,7 @@ urlpatterns = [
 	url(r'^country/$', views.CountryListView.as_view()),
 	url(r'^province/$', views.ProvinceListView.as_view()),
 	url(r'^signup/$', views.CreatePlayerView.as_view()),
-	url(r'^signin/(?P<pk>[0-9]+)$', views.SignInPlayerView.as_view()),
+	url(r'^editprofile/(?P<pk>[0-9]+)$', views.UpdatePlayerView.as_view()),
     url(r'^signin/(?P<username>.+)/(?P<password>.+)/$', views.SignInPlayerView.as_view()),
 	url(r'^fieldloc/$', views.FieldLocList.as_view()),
 	url(r'^field/$', views.FieldList.as_view()),

@@ -38,6 +38,9 @@ class SignInPlayerView(views.APIView):
         serializer = PlayerDetailSerializer(player, many=True)
         return Response(serializer.data)
 
+class UpdatePlayerView(generics.RetrieveUpdateAPIView):
+    queryset = Player.objects.all()
+    serializer_class = UpdatePlayerSerializer
     def perform_update(self, serializer):
         serializer.save(updated_at=timezone.now())
 
