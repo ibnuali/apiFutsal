@@ -8,7 +8,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
-
+from django.db.models import Count, Q
 
 class AuthGroup(models.Model):
     name = models.CharField(unique=True, max_length=80)
@@ -201,6 +201,11 @@ class Friend(models.Model):
     id_player2 = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player2', related_name="id_player2")
     friend_status = models.IntegerField(blank=True, null=True)
 
+    def __chat(self):
+        chat = Chat.objects.filter(id_friend = self.id_friend)
+        return chat
+
+    chat = property(__chat)
     class Meta:
         managed = False
         db_table = 'friend'
@@ -283,10 +288,90 @@ class Player(models.Model):
     player_address = models.CharField(max_length=80, blank=True, null=True)
     player_handphone = models.CharField(max_length=13)
     player_email = models.CharField(max_length=50)
-    player_username = models.CharField(max_length=30)
+    player_username = models.CharField(unique=True, max_length=30)
     player_password = models.CharField(max_length=50)
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(blank=True, null=True)
+
+    def __player_level(self):
+        level_hist = LevelHistory.objects.raw('''SELECT *
+                                              FROM level_history lh
+                                              INNER JOIN (
+                                              SELECT l.score_level,MAX(date_level_history) AS MaxDate
+                                              FROM level_history lm
+                                              INNER JOIN (
+                                              SELECT *
+                                              FROM level) l
+                                              ON l.id_level = lm.id_level
+                                              AND lm.id_player = %s
+                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
+
+        return level_hist[0].score_level
+
+    def __player_exp(self):
+        level_hist = LevelHistory.objects.raw('''SELECT *
+                                              FROM level_history lh
+                                              INNER JOIN (
+                                              SELECT l.score_level,MAX(date_level_history) AS MaxDate
+                                              FROM level_history lm
+                                              INNER JOIN (
+                                              SELECT *
+                                              FROM level) l
+                                              ON l.id_level = lm.id_level
+                                              AND lm.id_player = %s
+                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
+
+        return level_hist[0].player_exp
+
+    def __player_rating(self):
+        rating_score = RatingHistory.objects.raw('''SELECT *
+                                              FROM rating_history rh
+                                              INNER JOIN (
+                                              SELECT r.score_rating,MAX(date_rating_history) AS MaxDate
+                                              FROM rating_history rm
+                                              INNER JOIN (
+                                              SELECT *
+                                              FROM rating) r
+                                              ON r.id_rating = rm.id_rating
+                                              AND rm.id_player = %s
+                                              ) rm ON rh.id_player = %s AND rh.date_rating_history = rm.MaxDate''',[self.id_player,self.id_player])
+        rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
+        if (rating_hist["id_rating_history__count"]-1) != 0:
+            return rating_score[0].score_rating/(rating_hist["id_rating_history__count"]-1)
+        else:
+            return rating_score[0].score_rating
+
+    def __player_reviewed(self):
+        rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
+        return rating_hist["id_rating_history__count"]-1
+
+    def __player_positions(self):
+        in_query = PlayerPosition.objects.filter(id_player = self.id_player).values('id_position')
+        positions = Positions.objects.filter(id_position__in = in_query)
+        return positions
+
+    def __player_rooms(self):
+        rooms = Room.objects.filter(id_player = self.id_player)
+        return rooms
+
+    def __player_join_rooms(self):
+        join_rooms = JoinRoom.objects.filter(id_player = self.id_player)
+        return join_rooms
+
+    def __player_friends(self):
+        friend = Friend.objects.filter(id_player1 = self.id_player)
+        return friend
+
+
+    player_level = property(__player_level)
+    player_exp = property(__player_exp)
+    player_rating = property(__player_rating)
+    player_reviewed = property(__player_reviewed)
+    player_positions = property(__player_positions)
+    player_join_rooms = property(__player_join_rooms)
+    player_rooms = property(__player_rooms)
+
+    player_friends = property(__player_friends)
 
     class Meta:
         managed = False

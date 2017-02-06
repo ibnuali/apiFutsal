@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics,views
+from rest_framework.response import Response
 from .serializers import *
 from .models import *
 from django.utils import timezone
@@ -16,14 +17,19 @@ class ProvinceListView(generics.ListAPIView):
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
 
-class CreatePlayerView(generics.CreateAPIView):
-    serializer_class = PlayerSerializer
-    def perform_create(self, serializer):
-        serializer.save(created_at=timezone.now(),player_photo="urldefault")
+class CreatePlayerView(views.APIView):
+    def post(self, request):
+        serializer = SignupSerializer(data=request.data)
+        if serializer.is_valid():
+            player = serializer.save(created_at=timezone.now(),player_photo="urldefault")
+            output_serializer = PlayerDetailSerializer(player)
+            return Response(output_serializer.data)
+        else:
+            return Response(serializers.errors)
 
-class UpdatePlayerView(generics.RetrieveUpdateAPIView):
+class UpdatePlayerView(generics.RetrieveAPIView):
     queryset = Player.objects.all()
-    serializer_class = PlayerSerializer
+    serializer_class = PlayerDetailSerializer
     def perform_update(self, serializer):
         serializer.save(updated_at=timezone.now())
 
@@ -46,10 +52,6 @@ class CreateRoomList(generics.ListAPIView):
 class PartyList(generics.ListAPIView):
     queryset = Party.objects.all()
     serializer_class = PartySerializer
-
-class FriendList(generics.ListAPIView):
-    queryset = Friend.objects.all()
-    serializer_class = FriendSerializer
 
 class JoinPartyList(generics.ListAPIView):
     queryset = JoinParty.objects.all()
@@ -77,7 +79,7 @@ class RatingHistoryList(generics.ListAPIView):
 
 class FriendList(generics.ListAPIView):
     queryset = Friend.objects.all()
-    serializer_class = FriendSerializer
+    serializer_class = FriendListSerializer
 
 class RequiredPositionsList(generics.ListAPIView):
     queryset = RequiredPositions.objects.all()

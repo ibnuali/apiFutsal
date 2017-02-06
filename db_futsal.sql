@@ -7938,7 +7938,7 @@ INSERT INTO `level` (`id_level`, `score_level`, `score_exp`) VALUES
 --
 
 CREATE TABLE `level_history` (
-  `id_level_history` int(11) NOT NULL,
+  `id_level_history` int(11) NOT NULL AUTO_INCREMENT,
   `id_level` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `date_level_history` datetime NOT NULL,
@@ -8600,7 +8600,7 @@ INSERT INTO `rating` (`id_rating`, `score_rating`) VALUES
 --
 
 CREATE TABLE `rating_history` (
-  `id_rating_history` int(11) NOT NULL,
+  `id_rating_history` int(11) NOT NULL AUTO_INCREMENT,
   `id_player` int(11) NOT NULL,
   `id_rating` int(11) NOT NULL,
   `date_rating_history` datetime NOT NULL
