@@ -52,7 +52,13 @@ class GetPlayerView(views.APIView):
         serializer = PlayerSerializer(player, many=True)
         return Response(serializer.data)
 
-class FriendList(generics.ListCreateAPIView):
+class CreateRoomList(generics.ListCreateAPIView):
+    queryset = Room.objects.all()
+    serializer_class = CreateRoomSerializer
+    def perform_create(self, serializer):
+        serializer.save(room_status=0,room_created=timezone.now())
+
+class FriendList(generics.CreateAPIView):
     queryset = Friend.objects.all()
     serializer_class = FriendListSerializer
 
@@ -67,10 +73,6 @@ class FieldList(generics.ListAPIView):
 class FieldPhotosList(generics.ListAPIView):
     queryset = FieldPhotos.objects.all()
     serializer_class = FieldPhotoSerializer
-
-class CreateRoomList(generics.ListCreateAPIView):
-    queryset = Room.objects.all()
-    serializer_class = ListRoomSerializer
 
 class PartyList(generics.ListAPIView):
     queryset = Party.objects.all()

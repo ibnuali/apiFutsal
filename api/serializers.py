@@ -96,17 +96,10 @@ class PlayerDetailSerializer(serializers.ModelSerializer):
         'player_email','player_username','player_level','player_exp','player_rating','player_reviewed','player_positions',
         'player_rooms','player_join_rooms','player_friends')
 
-class RoomSerializer(serializers.ModelSerializer):
-    player = serializers.PrimaryKeyRelatedField(many=True, read_only=True,source='id_player')
+class CreateRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = Room
-        fields = (
-                    'player','id_field_location','room_name','room_stadium',
-                    'room_address','room_duration','required_level_min',
-                    'required_level_max','required_gender','required_age_min',
-                    'required_age_max','required_slot','room_status','room_created',
-                    'room_updated'
-                 )
+        exclude = ('room_status','room_created','room_updated')
 
 
 class FriendListSerializer(serializers.ModelSerializer):
