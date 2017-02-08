@@ -327,22 +327,14 @@ class Player(models.Model):
         return level_hist[0].player_exp
 
     def __player_rating(self):
-        rating_score = RatingHistory.objects.raw('''SELECT *
-                                              FROM rating_history rh
-                                              INNER JOIN (
-                                              SELECT r.score_rating,MAX(date_rating_history) AS MaxDate
-                                              FROM rating_history rm
-                                              INNER JOIN (
-                                              SELECT *
-                                              FROM rating) r
-                                              ON r.id_rating = rm.id_rating
-                                              AND rm.id_player = %s
-                                              ) rm ON rh.id_player = %s AND rh.date_rating_history = rm.MaxDate''',[self.id_player,self.id_player])
-        rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
-        if (rating_hist["id_rating_history__count"]-1) != 0:
-            return rating_score[0].score_rating/(rating_hist["id_rating_history__count"]-1)
+        rating = RatingHistory.objects.raw('''SELECT *,SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review
+                                              FROM rating_history rh, rating r
+                                              WHERE rh.id_player = %s AND rh.id_rating = r.id_rating''',[self.id_player])
+        print(rating[0].score)
+        if (rating[0].review-1) != 0:
+            return rating[0].score/(rating[0].review-1)
         else:
-            return rating_score[0].score_rating
+            return rating[0].score
 
     def __player_reviewed(self):
         rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
