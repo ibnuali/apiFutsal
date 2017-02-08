@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.4.14
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 06, 2017 at 03:12 PM
--- Server version: 10.1.10-MariaDB
--- PHP Version: 7.0.2
+-- Generation Time: Feb 08, 2017 at 04:58 AM
+-- Server version: 5.6.26
+-- PHP Version: 5.6.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -23,10 +23,29 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `authtoken_token`
+--
+
+CREATE TABLE IF NOT EXISTS `authtoken_token` (
+  `key` varchar(40) NOT NULL,
+  `created` datetime(6) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `authtoken_token`
+--
+
+INSERT INTO `authtoken_token` (`key`, `created`, `user_id`) VALUES
+('49dd6253d9729b1b8b0b3a8be9504b2b96bdb1b4', '2017-02-08 03:54:56.841434', 3);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `auth_group`
 --
 
-CREATE TABLE `auth_group` (
+CREATE TABLE IF NOT EXISTS `auth_group` (
   `id` int(11) NOT NULL,
   `name` varchar(80) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -37,7 +56,7 @@ CREATE TABLE `auth_group` (
 -- Table structure for table `auth_group_permissions`
 --
 
-CREATE TABLE `auth_group_permissions` (
+CREATE TABLE IF NOT EXISTS `auth_group_permissions` (
   `id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
@@ -49,12 +68,12 @@ CREATE TABLE `auth_group_permissions` (
 -- Table structure for table `auth_permission`
 --
 
-CREATE TABLE `auth_permission` (
+CREATE TABLE IF NOT EXISTS `auth_permission` (
   `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `content_type_id` int(11) NOT NULL,
   `codename` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=112 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `auth_permission`
@@ -168,7 +187,10 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 (105, 'Can delete required positions', 35, 'delete_requiredpositions'),
 (106, 'Can add room', 36, 'add_room'),
 (107, 'Can change room', 36, 'change_room'),
-(108, 'Can delete room', 36, 'delete_room');
+(108, 'Can delete room', 36, 'delete_room'),
+(109, 'Can add Token', 37, 'add_token'),
+(110, 'Can change Token', 37, 'change_token'),
+(111, 'Can delete Token', 37, 'delete_token');
 
 -- --------------------------------------------------------
 
@@ -176,7 +198,7 @@ INSERT INTO `auth_permission` (`id`, `name`, `content_type_id`, `codename`) VALU
 -- Table structure for table `auth_user`
 --
 
-CREATE TABLE `auth_user` (
+CREATE TABLE IF NOT EXISTS `auth_user` (
   `id` int(11) NOT NULL,
   `password` varchar(128) NOT NULL,
   `last_login` datetime(6) DEFAULT NULL,
@@ -188,14 +210,16 @@ CREATE TABLE `auth_user` (
   `is_staff` tinyint(1) NOT NULL,
   `is_active` tinyint(1) NOT NULL,
   `date_joined` datetime(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `auth_user`
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
-(1, 'pbkdf2_sha256$30000$SCwKMJelDhgi$SYVmgJcJsR75QjNWRmMsALRyrhzNO8tXAbyep/odK6M=', '2017-02-05 14:02:46.590146', 1, 'Fadhlan', '', '', 'fridhwanallah@gmail.com', 1, 1, '2017-02-05 05:36:51.688590');
+(1, 'pbkdf2_sha256$30000$SCwKMJelDhgi$SYVmgJcJsR75QjNWRmMsALRyrhzNO8tXAbyep/odK6M=', '2017-02-05 14:02:46.590146', 1, 'Fadhlan', '', '', 'fridhwanallah@gmail.com', 1, 1, '2017-02-05 05:36:51.688590'),
+(2, 'pbkdf2_sha256$36000$fUKyvdehaIyk$TN8kRZ1MN3CnH/Fc3FHPdn+i8JybO5drwV8ZX3dJpbg=', '2017-02-07 16:53:36.600069', 1, 'ibnuali', '', '', '', 1, 1, '2017-02-07 16:53:08.782386'),
+(3, 'pbkdf2_sha256$36000$mp0gM7E1QUF1$GGvM2DjbG1p/AZgTiVm7ifXi8JSvG73vKpW0e62PadY=', NULL, 1, 'maul', '', '', '', 1, 1, '2017-02-08 03:54:56.727549');
 
 -- --------------------------------------------------------
 
@@ -203,7 +227,7 @@ INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `userna
 -- Table structure for table `auth_user_groups`
 --
 
-CREATE TABLE `auth_user_groups` (
+CREATE TABLE IF NOT EXISTS `auth_user_groups` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `group_id` int(11) NOT NULL
@@ -215,7 +239,7 @@ CREATE TABLE `auth_user_groups` (
 -- Table structure for table `auth_user_user_permissions`
 --
 
-CREATE TABLE `auth_user_user_permissions` (
+CREATE TABLE IF NOT EXISTS `auth_user_user_permissions` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
@@ -227,7 +251,7 @@ CREATE TABLE `auth_user_user_permissions` (
 -- Table structure for table `chat`
 --
 
-CREATE TABLE `chat` (
+CREATE TABLE IF NOT EXISTS `chat` (
   `id_chat` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `id_room` int(11) DEFAULT NULL,
@@ -242,7 +266,7 @@ CREATE TABLE `chat` (
 -- Table structure for table `city`
 --
 
-CREATE TABLE `city` (
+CREATE TABLE IF NOT EXISTS `city` (
   `id_city` varchar(4) NOT NULL,
   `id_province` varchar(2) NOT NULL,
   `name_city` varchar(50) NOT NULL
@@ -759,10 +783,10 @@ INSERT INTO `city` (`id_city`, `id_province`, `name_city`) VALUES
 -- Table structure for table `country`
 --
 
-CREATE TABLE `country` (
+CREATE TABLE IF NOT EXISTS `country` (
   `id_country` int(11) NOT NULL,
   `name_country` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `country`
@@ -777,7 +801,7 @@ INSERT INTO `country` (`id_country`, `name_country`) VALUES
 -- Table structure for table `district`
 --
 
-CREATE TABLE `district` (
+CREATE TABLE IF NOT EXISTS `district` (
   `id_district` varchar(7) NOT NULL,
   `id_city` varchar(4) NOT NULL,
   `name_district` varchar(60) NOT NULL
@@ -7677,12 +7701,12 @@ INSERT INTO `district` (`id_district`, `id_city`, `name_district`) VALUES
 -- Table structure for table `django_admin_log`
 --
 
-CREATE TABLE `django_admin_log` (
+CREATE TABLE IF NOT EXISTS `django_admin_log` (
   `id` int(11) NOT NULL,
   `action_time` datetime(6) NOT NULL,
   `object_id` longtext,
   `object_repr` varchar(200) NOT NULL,
-  `action_flag` smallint(5) UNSIGNED NOT NULL,
+  `action_flag` smallint(5) unsigned NOT NULL,
   `change_message` longtext NOT NULL,
   `content_type_id` int(11) DEFAULT NULL,
   `user_id` int(11) NOT NULL
@@ -7694,11 +7718,11 @@ CREATE TABLE `django_admin_log` (
 -- Table structure for table `django_content_type`
 --
 
-CREATE TABLE `django_content_type` (
+CREATE TABLE IF NOT EXISTS `django_content_type` (
   `id` int(11) NOT NULL,
   `app_label` varchar(100) NOT NULL,
   `model` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `django_content_type`
@@ -7739,6 +7763,7 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 (3, 'auth', 'group'),
 (4, 'auth', 'permission'),
 (2, 'auth', 'user'),
+(37, 'authtoken', 'token'),
 (5, 'contenttypes', 'contenttype'),
 (6, 'sessions', 'session');
 
@@ -7748,12 +7773,12 @@ INSERT INTO `django_content_type` (`id`, `app_label`, `model`) VALUES
 -- Table structure for table `django_migrations`
 --
 
-CREATE TABLE `django_migrations` (
+CREATE TABLE IF NOT EXISTS `django_migrations` (
   `id` int(11) NOT NULL,
   `app` varchar(255) NOT NULL,
   `name` varchar(255) NOT NULL,
   `applied` datetime(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `django_migrations`
@@ -7773,7 +7798,9 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 (11, 'auth', '0006_require_contenttypes_0002', '2017-02-05 05:23:07.662212'),
 (12, 'auth', '0007_alter_validators_add_error_messages', '2017-02-05 05:23:07.740323'),
 (13, 'auth', '0008_alter_user_username_max_length', '2017-02-05 05:23:08.631008'),
-(14, 'sessions', '0001_initial', '2017-02-05 05:23:09.287272');
+(14, 'sessions', '0001_initial', '2017-02-05 05:23:09.287272'),
+(15, 'authtoken', '0001_initial', '2017-02-08 03:34:26.919020'),
+(16, 'authtoken', '0002_auto_20160226_1747', '2017-02-08 03:34:27.944559');
 
 -- --------------------------------------------------------
 
@@ -7781,7 +7808,7 @@ INSERT INTO `django_migrations` (`id`, `app`, `name`, `applied`) VALUES
 -- Table structure for table `django_session`
 --
 
-CREATE TABLE `django_session` (
+CREATE TABLE IF NOT EXISTS `django_session` (
   `session_key` varchar(40) NOT NULL,
   `session_data` longtext NOT NULL,
   `expire_date` datetime(6) NOT NULL
@@ -7795,7 +7822,8 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 ('5i6i2ekayeew37n0hxmv6d8pzsq19148', 'MTc3ZGRlMzM3MTNlYjkxYWU2NzdiZjlhY2IwOWFkZWU1ZWMxY2ZlMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEiLCJfYXV0aF91c2VyX2hhc2giOiI1ZmM0OGJmZjRkN2ViYWMxYjYxYmI5MWQwZDQ0ZWE5ZDU5NmRlN2FkIn0=', '2017-02-19 07:59:53.486118'),
 ('8xlvoalwn1wq5oaon98bht2rmrbmhxuv', 'MTc3ZGRlMzM3MTNlYjkxYWU2NzdiZjlhY2IwOWFkZWU1ZWMxY2ZlMTp7Il9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIiwiX2F1dGhfdXNlcl9pZCI6IjEiLCJfYXV0aF91c2VyX2hhc2giOiI1ZmM0OGJmZjRkN2ViYWMxYjYxYmI5MWQwZDQ0ZWE5ZDU5NmRlN2FkIn0=', '2017-02-19 05:37:29.159153'),
 ('9e8e7nd9ek8ip9t549rkjvqvdwbuszlp', 'YjExMmZjY2FmNTUxOTM2YWI1ZTk0N2EyZDYwYTQ1NGE1MzNhMzFmZjp7Il9hdXRoX3VzZXJfaGFzaCI6IjVmYzQ4YmZmNGQ3ZWJhYzFiNjFiYjkxZDBkNDRlYTlkNTk2ZGU3YWQiLCJfYXV0aF91c2VyX2JhY2tlbmQiOiJkamFuZ28uY29udHJpYi5hdXRoLmJhY2tlbmRzLk1vZGVsQmFja2VuZCIsIl9hdXRoX3VzZXJfaWQiOiIxIn0=', '2017-02-19 14:02:46.652631'),
-('9y50tsuag1k9cocld9fqtsp24tnpmdsg', 'OTUyNTA5ZjYwYzNmNWY3MzE1NzJiOWU2MDdmMTE3YzE5ZGJmYjE2Mzp7Il9hdXRoX3VzZXJfaGFzaCI6IjVmYzQ4YmZmNGQ3ZWJhYzFiNjFiYjkxZDBkNDRlYTlkNTk2ZGU3YWQiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=', '2017-02-19 07:15:28.054051');
+('9y50tsuag1k9cocld9fqtsp24tnpmdsg', 'OTUyNTA5ZjYwYzNmNWY3MzE1NzJiOWU2MDdmMTE3YzE5ZGJmYjE2Mzp7Il9hdXRoX3VzZXJfaGFzaCI6IjVmYzQ4YmZmNGQ3ZWJhYzFiNjFiYjkxZDBkNDRlYTlkNTk2ZGU3YWQiLCJfYXV0aF91c2VyX2lkIjoiMSIsIl9hdXRoX3VzZXJfYmFja2VuZCI6ImRqYW5nby5jb250cmliLmF1dGguYmFja2VuZHMuTW9kZWxCYWNrZW5kIn0=', '2017-02-19 07:15:28.054051'),
+('miwgbnfg81wci8sz0tm4ku8rfc51q8v4', 'ZjBjZWRiZmY0YjU1NzU1MTg4NTgwODRhNzcyYjFmNGRmNjJmMmJkZDp7Il9hdXRoX3VzZXJfaWQiOiIyIiwiX2F1dGhfdXNlcl9iYWNrZW5kIjoiZGphbmdvLmNvbnRyaWIuYXV0aC5iYWNrZW5kcy5Nb2RlbEJhY2tlbmQiLCJfYXV0aF91c2VyX2hhc2giOiI5ZjIzNmNjODg0MmQyODQ3MTBkMjUwNWMwNTNhZTlkNDk3MzlkMTBhIn0=', '2017-02-21 16:53:36.660526');
 
 -- --------------------------------------------------------
 
@@ -7803,7 +7831,7 @@ INSERT INTO `django_session` (`session_key`, `session_data`, `expire_date`) VALU
 -- Table structure for table `field`
 --
 
-CREATE TABLE `field` (
+CREATE TABLE IF NOT EXISTS `field` (
   `id_field` int(11) NOT NULL,
   `name_field` varchar(30) NOT NULL,
   `latitude_field` double NOT NULL,
@@ -7817,7 +7845,7 @@ CREATE TABLE `field` (
 -- Table structure for table `field_location`
 --
 
-CREATE TABLE `field_location` (
+CREATE TABLE IF NOT EXISTS `field_location` (
   `id_field_location` int(11) NOT NULL,
   `id_district` varchar(7) NOT NULL,
   `name_field_location` varchar(40) NOT NULL,
@@ -7831,7 +7859,7 @@ CREATE TABLE `field_location` (
 -- Table structure for table `field_photos`
 --
 
-CREATE TABLE `field_photos` (
+CREATE TABLE IF NOT EXISTS `field_photos` (
   `id_field` int(11) NOT NULL,
   `field_photos` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -7842,12 +7870,12 @@ CREATE TABLE `field_photos` (
 -- Table structure for table `friend`
 --
 
-CREATE TABLE `friend` (
+CREATE TABLE IF NOT EXISTS `friend` (
   `id_friend` int(11) NOT NULL,
   `id_player1` int(11) NOT NULL,
   `id_player2` int(11) NOT NULL,
   `friend_status` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `friend`
@@ -7863,10 +7891,10 @@ INSERT INTO `friend` (`id_friend`, `id_player1`, `id_player2`, `friend_status`) 
 -- Table structure for table `genders`
 --
 
-CREATE TABLE `genders` (
+CREATE TABLE IF NOT EXISTS `genders` (
   `id_gender` int(11) NOT NULL,
   `gender` varchar(6) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `genders`
@@ -7882,7 +7910,7 @@ INSERT INTO `genders` (`id_gender`, `gender`) VALUES
 -- Table structure for table `join_party`
 --
 
-CREATE TABLE `join_party` (
+CREATE TABLE IF NOT EXISTS `join_party` (
   `id_join_party` int(11) NOT NULL,
   `id_party` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
@@ -7895,7 +7923,7 @@ CREATE TABLE `join_party` (
 -- Table structure for table `join_room`
 --
 
-CREATE TABLE `join_room` (
+CREATE TABLE IF NOT EXISTS `join_room` (
   `id_join_room` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `id_room` int(11) NOT NULL,
@@ -7908,11 +7936,11 @@ CREATE TABLE `join_room` (
 -- Table structure for table `level`
 --
 
-CREATE TABLE `level` (
+CREATE TABLE IF NOT EXISTS `level` (
   `id_level` int(11) NOT NULL,
   `score_level` int(11) NOT NULL,
   `score_exp` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `level`
@@ -7946,13 +7974,13 @@ INSERT INTO `level` (`id_level`, `score_level`, `score_exp`) VALUES
 -- Table structure for table `level_history`
 --
 
-CREATE TABLE `level_history` (
+CREATE TABLE IF NOT EXISTS `level_history` (
   `id_level_history` int(11) NOT NULL,
   `id_level` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `date_level_history` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `player_exp` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `level_history`
@@ -7969,7 +7997,7 @@ INSERT INTO `level_history` (`id_level_history`, `id_level`, `id_player`, `date_
 -- Table structure for table `party`
 --
 
-CREATE TABLE `party` (
+CREATE TABLE IF NOT EXISTS `party` (
   `id_party` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `party_name` varchar(50) NOT NULL,
@@ -7983,7 +8011,7 @@ CREATE TABLE `party` (
 -- Table structure for table `player`
 --
 
-CREATE TABLE `player` (
+CREATE TABLE IF NOT EXISTS `player` (
   `id_player` int(11) NOT NULL,
   `id_district` varchar(7) DEFAULT NULL,
   `id_gender` int(11) NOT NULL,
@@ -7999,7 +8027,7 @@ CREATE TABLE `player` (
   `player_password` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `player`
@@ -8014,7 +8042,8 @@ INSERT INTO `player` (`id_player`, `id_district`, `id_gender`, `player_first_nam
 -- Triggers `player`
 --
 DELIMITER $$
-CREATE TRIGGER `insert_player_data` AFTER INSERT ON `player` FOR EACH ROW BEGIN
+CREATE TRIGGER `insert_player_data` AFTER INSERT ON `player`
+ FOR EACH ROW BEGIN
 INSERT INTO level_history VALUES(0,1,NEW.id_player,NOW(),0);
 INSERT INTO rating_history VALUES(0,NEW.id_player,1,NOW());
 END
@@ -8027,11 +8056,11 @@ DELIMITER ;
 -- Table structure for table `player_position`
 --
 
-CREATE TABLE `player_position` (
+CREATE TABLE IF NOT EXISTS `player_position` (
   `id_player_position` int(11) NOT NULL,
   `id_position` int(11) NOT NULL,
   `id_player` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `player_position`
@@ -8047,10 +8076,10 @@ INSERT INTO `player_position` (`id_player_position`, `id_position`, `id_player`)
 -- Table structure for table `positions`
 --
 
-CREATE TABLE `positions` (
+CREATE TABLE IF NOT EXISTS `positions` (
   `id_position` int(11) NOT NULL,
   `position` varchar(15) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `positions`
@@ -8068,7 +8097,7 @@ INSERT INTO `positions` (`id_position`, `position`) VALUES
 -- Table structure for table `province`
 --
 
-CREATE TABLE `province` (
+CREATE TABLE IF NOT EXISTS `province` (
   `id_province` varchar(2) NOT NULL,
   `id_country` int(11) NOT NULL,
   `name_province` varchar(50) NOT NULL
@@ -8120,10 +8149,10 @@ INSERT INTO `province` (`id_province`, `id_country`, `name_province`) VALUES
 -- Table structure for table `rating`
 --
 
-CREATE TABLE `rating` (
+CREATE TABLE IF NOT EXISTS `rating` (
   `id_rating` int(11) NOT NULL,
   `score_rating` double NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=502 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rating`
@@ -8638,12 +8667,12 @@ INSERT INTO `rating` (`id_rating`, `score_rating`) VALUES
 -- Table structure for table `rating_history`
 --
 
-CREATE TABLE `rating_history` (
+CREATE TABLE IF NOT EXISTS `rating_history` (
   `id_rating_history` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `id_rating` int(11) NOT NULL,
   `date_rating_history` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `rating_history`
@@ -8660,7 +8689,7 @@ INSERT INTO `rating_history` (`id_rating_history`, `id_player`, `id_rating`, `da
 -- Table structure for table `required_positions`
 --
 
-CREATE TABLE `required_positions` (
+CREATE TABLE IF NOT EXISTS `required_positions` (
   `id_required_positions` int(11) NOT NULL,
   `id_room` int(11) NOT NULL,
   `id_position` int(11) NOT NULL
@@ -8672,7 +8701,7 @@ CREATE TABLE `required_positions` (
 -- Table structure for table `room`
 --
 
-CREATE TABLE `room` (
+CREATE TABLE IF NOT EXISTS `room` (
   `id_room` int(11) NOT NULL,
   `id_player` int(11) NOT NULL,
   `required_gender` int(11) DEFAULT NULL,
@@ -8698,7 +8727,7 @@ CREATE TABLE `room` (
 -- Table structure for table `store`
 --
 
-CREATE TABLE `store` (
+CREATE TABLE IF NOT EXISTS `store` (
   `id_store` int(11) NOT NULL,
   `name_store` varchar(40) NOT NULL,
   `description_store` varchar(100) NOT NULL,
@@ -8710,6 +8739,13 @@ CREATE TABLE `store` (
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `authtoken_token`
+--
+ALTER TABLE `authtoken_token`
+  ADD PRIMARY KEY (`key`),
+  ADD UNIQUE KEY `user_id` (`user_id`);
 
 --
 -- Indexes for table `auth_group`
@@ -8969,12 +9005,12 @@ ALTER TABLE `auth_group_permissions`
 -- AUTO_INCREMENT for table `auth_permission`
 --
 ALTER TABLE `auth_permission`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=112;
 --
 -- AUTO_INCREMENT for table `auth_user`
 --
 ALTER TABLE `auth_user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `auth_user_groups`
 --
@@ -8994,7 +9030,7 @@ ALTER TABLE `chat`
 -- AUTO_INCREMENT for table `country`
 --
 ALTER TABLE `country`
-  MODIFY `id_country` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_country` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `django_admin_log`
 --
@@ -9004,12 +9040,12 @@ ALTER TABLE `django_admin_log`
 -- AUTO_INCREMENT for table `django_content_type`
 --
 ALTER TABLE `django_content_type`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=38;
 --
 -- AUTO_INCREMENT for table `django_migrations`
 --
 ALTER TABLE `django_migrations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=17;
 --
 -- AUTO_INCREMENT for table `field`
 --
@@ -9024,12 +9060,12 @@ ALTER TABLE `field_location`
 -- AUTO_INCREMENT for table `friend`
 --
 ALTER TABLE `friend`
-  MODIFY `id_friend` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_friend` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `genders`
 --
 ALTER TABLE `genders`
-  MODIFY `id_gender` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_gender` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `join_party`
 --
@@ -9044,12 +9080,12 @@ ALTER TABLE `join_room`
 -- AUTO_INCREMENT for table `level`
 --
 ALTER TABLE `level`
-  MODIFY `id_level` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_level` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT for table `level_history`
 --
 ALTER TABLE `level_history`
-  MODIFY `id_level_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id_level_history` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `party`
 --
@@ -9059,27 +9095,27 @@ ALTER TABLE `party`
 -- AUTO_INCREMENT for table `player`
 --
 ALTER TABLE `player`
-  MODIFY `id_player` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id_player` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `player_position`
 --
 ALTER TABLE `player_position`
-  MODIFY `id_player_position` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_player_position` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `id_position` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_position` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `rating`
 --
 ALTER TABLE `rating`
-  MODIFY `id_rating` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=502;
+  MODIFY `id_rating` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=502;
 --
 -- AUTO_INCREMENT for table `rating_history`
 --
 ALTER TABLE `rating_history`
-  MODIFY `id_rating_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_rating_history` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `required_positions`
 --
@@ -9098,6 +9134,12 @@ ALTER TABLE `store`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `authtoken_token`
+--
+ALTER TABLE `authtoken_token`
+  ADD CONSTRAINT `authtoken_token_user_id_35299eff_fk_auth_user_id` FOREIGN KEY (`user_id`) REFERENCES `auth_user` (`id`);
 
 --
 -- Constraints for table `auth_group_permissions`
