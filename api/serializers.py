@@ -46,7 +46,7 @@ class PlayerSerializer(serializers.ModelSerializer):
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)
     class Meta:
         model = Player
-        fields = ('id_player','player_first_name','player_last_name','player_gender',
+        fields = ('id_player','player_first_name','player_last_name','player_username','player_gender',
         'player_photo','player_level','player_exp','player_rating','player_reviewed','player_positions',)
 
 class PlayerDataSerializer(serializers.ModelSerializer):
@@ -59,12 +59,17 @@ class ChatFriendSerializer(serializers.ModelSerializer):
         model = Chat
         exclude = ('id_player','id_room','id_party')
 
+class PlayerFriendDataSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Player
+        fields = ('id_player','player_first_name','player_last_name','player_username',
+        'player_photo')
+
 class PlayerFriendListSerializer(serializers.ModelSerializer):
-    id_player2 = PlayerSerializer(read_only=True)
-    chat = ChatFriendSerializer(many=True,read_only=True)
+    id_player2 = PlayerFriendDataSerializer(read_only=True)
     class Meta:
         model = Friend
-        exclude = ('id_player1',)
+        exclude = ('id_player1','friend_status')
 
 class PlayerRoomSerializer(serializers.ModelSerializer):
     class Meta:
