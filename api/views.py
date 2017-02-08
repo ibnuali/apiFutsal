@@ -68,7 +68,7 @@ class FieldPhotosList(generics.ListAPIView):
     queryset = FieldPhotos.objects.all()
     serializer_class = FieldPhotoSerializer
 
-class CreateRoomList(generics.ListAPIView):
+class CreateRoomList(generics.ListCreateAPIView):
     queryset = Room.objects.all()
     serializer_class = ListRoomSerializer
 
