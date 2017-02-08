@@ -8042,8 +8042,11 @@ INSERT INTO `player` (`id_player`, `id_district`, `id_gender`, `player_first_nam
 -- Triggers `player`
 --
 DELIMITER $$
-CREATE TRIGGER `insert_player_data` AFTER INSERT ON `player`
- FOR EACH ROW BEGIN
+CREATE TRIGGER `Binsert_player_data` AFTER INSERT ON `player`
+FOR EACH ROW BEGIN
+DECLARE id_lh,id_rh integer;
+SELECT SUM(id_level_history) INTO id_lh FROM level_history;
+SELECT SUM(id_rating_history) INTO id_lh FROM rating_history;
 INSERT INTO level_history VALUES(0,1,NEW.id_player,NOW(),0);
 INSERT INTO rating_history VALUES(0,NEW.id_player,1,NOW());
 END

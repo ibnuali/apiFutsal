@@ -25,7 +25,7 @@ class CreatePlayerView(views.APIView):
             output_serializer = PlayerDetailSerializer(player)
             return Response(output_serializer.data)
         else:
-            return Response(serializers.errors)
+            return Response(serializer.errors)
 
 class SignInPlayerView(views.APIView):
     def get(self, request, username, password):
