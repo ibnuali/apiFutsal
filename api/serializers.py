@@ -84,10 +84,6 @@ class PlayerJoinRoomSerializer(serializers.ModelSerializer):
 
 class PlayerDetailSerializer(serializers.ModelSerializer):
     player_gender = GenderSerializer(read_only=True,source='id_gender')
-    player_level = serializers.IntegerField(read_only=True)
-    player_exp = serializers.IntegerField(read_only=True)
-    player_rating = serializers.IntegerField(read_only=True)
-    player_reviewed = serializers.IntegerField(read_only=True)
     player_friends = PlayerFriendListSerializer(many=True,read_only=True)
     player_rooms = PlayerRoomSerializer(many=True,read_only=True)
     player_join_rooms = PlayerJoinRoomSerializer(many=True,read_only=True)
