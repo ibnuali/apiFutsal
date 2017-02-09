@@ -455,6 +455,11 @@ class Room(models.Model):
     room_created = models.DateTimeField()
     room_updated = models.DateTimeField(blank=True, null=True)
 
+    def __room_players(self):
+        friend = JoinRoom.objects.filter(id_room = self.id_room)
+        return friend
+
+    room_players = property(__room_players)
     class Meta:
         managed = False
         db_table = 'room'

@@ -56,11 +56,21 @@ class GetPlayerByIdView(generics.RetrieveAPIView):
     queryset = Player.objects.all()
     serializer_class = PlayerSerializer
 
-class CreateRoomList(generics.ListCreateAPIView):
+class CreateRoomListView(generics.ListCreateAPIView):
     queryset = Room.objects.all()
     serializer_class = CreateRoomSerializer
     def perform_create(self, serializer):
         serializer.save(room_status=0,room_created=timezone.now())
+
+class RoomDetailView(generics.RetrieveUpdateAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomDetailSerializer
+    def perform_update(self, serializer):
+        serializer.save(room_update=timezone.now())
+
+class JoinRoomView(generics.CreateAPIView):
+    queryset = JoinRoom.objects.all()
+    serializer_class =JoinRoomSerializer
 
 class FriendList(generics.CreateAPIView):
     queryset = Friend.objects.all()

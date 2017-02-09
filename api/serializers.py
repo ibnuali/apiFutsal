@@ -101,6 +101,16 @@ class CreateRoomSerializer(serializers.ModelSerializer):
         model = Room
         exclude = ('room_status','room_created','room_updated')
 
+class PlayerRoomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JoinRoom
+        fields = ('id_join_room','id_player','date_join_room')
+
+class RoomDetailSerializer(serializers.ModelSerializer):
+    room_players =  PlayerRoomSerializer(many=True,read_only=True)
+    class Meta:
+        model = Room
+        exclude = ('room_status','room_created','room_updated')
 
 class FriendListSerializer(serializers.ModelSerializer):
     class Meta:
