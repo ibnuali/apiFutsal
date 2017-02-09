@@ -43,7 +43,7 @@ class UpdatePlayerView(generics.RetrieveUpdateAPIView):
     def perform_update(self, serializer):
         serializer.save(updated_at=timezone.now())
 
-class GetPlayerView(views.APIView):
+class GetPlayerByUsernameView(views.APIView):
     def get(self, request, username):
         try:
             player = Player.objects.filter(player_username = username)
@@ -51,6 +51,10 @@ class GetPlayerView(views.APIView):
             return HttpResponse(status=404)
         serializer = PlayerSerializer(player, many=True)
         return Response(serializer.data)
+
+class GetPlayerByIdView(generics.RetrieveAPIView):
+    queryset = Player.objects.all()
+    serializer_class = PlayerSerializer
 
 class CreateRoomList(generics.ListCreateAPIView):
     queryset = Room.objects.all()
