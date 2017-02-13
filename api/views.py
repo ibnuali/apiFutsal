@@ -62,7 +62,11 @@ class CreateRoomListView(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(room_status=0,room_created=timezone.now())
 
-class RoomDetailView(generics.RetrieveUpdateAPIView):
+class RoomDetailView(generics.RetrieveAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomDetailSerializer
+
+class UpdateRoomView(generics.UpdateAPIView):
     queryset = Room.objects.all()
     serializer_class = RoomDetailSerializer
     def perform_update(self, serializer):

@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^friend/$', views.FriendList.as_view()),
     url(r'^room/$', views.CreateRoomListView.as_view()),
     url(r'^getroom/(?P<pk>[0-9]+)$', views.RoomDetailView.as_view()),
+    url(r'^updateroom/(?P<pk>[0-9]+)$', views.UpdateRoomView.as_view()),
     url(r'^joinroom/$', views.JoinRoomView.as_view()),
 	url(r'^fieldloc/$', views.FieldLocList.as_view()),
 	url(r'^field/$', views.FieldList.as_view()),
