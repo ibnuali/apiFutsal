@@ -8748,6 +8748,20 @@ CREATE TABLE `room` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
+--
+-- Triggers `player`
+--
+DELIMITER $$
+CREATE TRIGGER `AInsert_level_history` AFTER INSERT ON `room`
+FOR EACH ROW BEGIN
+DECLARE id_jr integer;
+SELECT SUM(id_join_room) INTO id_jr FROM join_room;
+INSERT INTO join_room VALUES(id_jr+1,NEW.id_player,NEW.id_room,NOW());
+END
+$$
+DELIMITER ;
+
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `store`
