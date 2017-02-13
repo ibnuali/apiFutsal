@@ -459,7 +459,12 @@ class Room(models.Model):
         friend = JoinRoom.objects.filter(id_room = self.id_room)
         return friend
 
+    def __filled_slot(self):
+        fill_slot = JoinRoom.objects.filter(id_room = self.id_room).aggregate(Count("id_join_room"))
+        return fill_slot["id_join_room__count"]
+
     room_players = property(__room_players)
+    filled_slot = property(__filled_slot)
     class Meta:
         managed = False
         db_table = 'room'
