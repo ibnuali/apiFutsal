@@ -1,0 +1,2 @@
+1. Sign up (Sudah beres di versi berikutnya).
+2. Sign in : - Tambahan data keluaran, data jadwal, dan data schedule, rating perbaharui query di django nya.
