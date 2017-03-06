@@ -42,8 +42,8 @@ class PlayerPositionListSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class PlayerSerializer(serializers.ModelSerializer):
-    player_gender = GenderSerializer(read_only=True,source='id_gender')
-    player_positions = PlayerPositionListSerializer(many=True,read_only=True)
+    player_gender = GenderSerializer(read_only=True,source='id_gender') #mengambil data gender dari pemain melalui GenderSerializer
+    player_positions = PlayerPositionListSerializer(many=True,read_only=True) #mengambil data posisi dari pemain melalui PlayerPositionListSerializer
     class Meta:
         model = Player
         fields = ('id_player','player_first_name','player_last_name','player_username','player_gender','player_birth_place',
@@ -67,7 +67,7 @@ class PlayerFriendDataSerializer(serializers.ModelSerializer):
         'player_photo')
 
 class PlayerFriendListSerializer(serializers.ModelSerializer):
-    id_player2 = PlayerFriendDataSerializer(read_only=True)
+    id_player2 = PlayerFriendDataSerializer(read_only=True) #Mengambil data teman seorang player melalui serializer PlayerFriendDataSerializer
     class Meta:
         model = Friend
         exclude = ('id_player1','friend_status')
@@ -81,7 +81,7 @@ class PlayerRoomSerializer(serializers.ModelSerializer):
 class PlayerJoinRoomSerializer(serializers.ModelSerializer):
     class Meta:
         model = JoinRoom
-        exclude = ('id_player')
+        fields = ('id_join_room','date_join_room','id_room')
 
 class PlayerDetailSerializer(serializers.ModelSerializer):
     player_gender = GenderSerializer(read_only=True,source='id_gender')
@@ -104,7 +104,7 @@ class PlayerRoomSerializer(serializers.ModelSerializer):
 
 class CreateRoomSerializer(serializers.ModelSerializer):
     filled_slot = serializers.IntegerField()
-    master_room = PlayerRoomSerializer(read_only=True,source='id_player')
+    master_room = PlayerRoomSerializer(read_only=True,source='id_player') #Membuat properties master_room
     class Meta:
         model = Room
         exclude = ('room_status','id_player','room_created','room_updated')

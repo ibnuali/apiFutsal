@@ -19,10 +19,10 @@ class ProvinceListView(generics.ListAPIView):
 
 class CreatePlayerView(views.APIView):
     def post(self, request):
-        serializer = SignupSerializer(data=request.data)
+        serializer = SignupSerializer(data=request.data) #input serializer
         if serializer.is_valid():
             player = serializer.save(created_at=timezone.now(),player_photo="urldefault")
-            output_serializer = PlayerDetailSerializer(player)
+            output_serializer = PlayerDetailSerializer(player) #output serializer
             return Response(output_serializer.data)
         else:
             return Response(serializer.errors)
@@ -30,7 +30,7 @@ class CreatePlayerView(views.APIView):
 class SignInPlayerView(views.APIView):
     def get(self, request, username, password):
         try:
-            player = Player.SignIn(username,password)
+            player = Player.SignIn(username,password) #menggunakan method yang didefine di model player untuk mencari data pemain
         except player.DoesNotExist:
             return HttpResponse(status=404)
         serializer = PlayerDetailSerializer(player, many=True)
