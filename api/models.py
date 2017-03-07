@@ -393,10 +393,98 @@ class Player(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(blank=True, null=True)
 
+    #Method untuk ngambil data level seorang pemain
+    def __player_level(self):
+        level_hist = LevelHistory.objects.raw('''SELECT *
+                                              FROM level_history lh
+                                              INNER JOIN (
+                                              SELECT l.score_level,MAX(date_level_history) AS MaxDate
+                                              FROM level_history lm
+                                              INNER JOIN (
+                                              SELECT *
+                                              FROM level) l
+                                              ON l.id_level = lm.id_level
+                                              AND lm.id_player = %s
+                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
+
+        return level_hist[0].score_level
+
+    #Method untuk ngambil data exp seorang pemain
+    def __player_exp(self):
+        level_hist = LevelHistory.objects.raw('''SELECT *
+                                              FROM level_history lh
+                                              INNER JOIN (
+                                              SELECT l.score_level,MAX(date_level_history) AS MaxDate
+                                              FROM level_history lm
+                                              INNER JOIN (
+                                              SELECT *
+                                              FROM level) l
+                                              ON l.id_level = lm.id_level
+                                              AND lm.id_player = %s
+                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
+
+        return level_hist[0].player_exp
+
+    #Method untuk ngambil data rating seorang pemain
+    def __player_rating(self):
+        rating = RatingHistory.objects.raw('''SELECT *,SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review,
+                                              FROM rating_history rh, rating r,rating_category
+                                              WHERE rh.id_player = %s AND rh.id_rating = r.id_rating''',[self.id_player])
+        '''
+            SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                              FROM rating_history rh, rating r,rating_category rc
+                                              WHERE rh.id_rating = r.id_rating AND rh.short_rating_category = rc.short_rating_category GROUP BY short_rating_category
+                                              '''
+        print(rating[0].score)
+        if (rating[0].review-1) != 0:
+            return rating[0].score/(rating[0].review-1)
+        else:
+            return rating[0].score
+
+    #Method untuk ngambil data total orang yang meriview seorang pemain
+    def __player_reviewed(self):
+        rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
+        return rating_hist["id_rating_history__count"]-1
+
+    #Method untuk ngambil data posisi seorang pemain
+    def __player_positions(self):
+        in_query = PlayerPosition.objects.filter(id_player = self.id_player).values('id_position')
+        positions = Positions.objects.filter(id_position__in = in_query)
+        return positions
+
+    #Method untuk ngambil data rooms dimana pemain tersebut menjadi admin di room tersebut
+    def __player_rooms(self):
+        rooms = Room.objects.filter(id_player = self.id_player)
+        return rooms
+
+    #Method untuk ngambil data rooms dimana pemain tersebut bergabung di room tersebut
+    def __player_join_rooms(self):
+        join_rooms = JoinRoom.objects.filter(id_player = self.id_player)
+        return join_rooms
+
+    #Method untuk ngambil data teman dari seorang pemain
+    def __player_friends(self):
+        friend = Friend.objects.filter(id_player1 = self.id_player)
+        return friend
+
+    #definisi properti dan method yang ditampungnya
+    player_level = property(__player_level)
+    player_exp = property(__player_exp)
+    player_rating = property(__player_rating)
+    player_reviewed = property(__player_reviewed)
+    player_positions = property(__player_positions)
+    player_join_rooms = property(__player_join_rooms)
+    player_rooms = property(__player_rooms)
+    player_friends = property(__player_friends)
+
+    def SignIn(username, password):
+        queryset = Player.objects.filter(player_username=username).filter(player_password=password)
+        return queryset
+
+
     class Meta:
         managed = False
         db_table = 'player'
-
 
 class PlayerAchievement(models.Model):
     id_player_achievement = models.AutoField(primary_key=True)
