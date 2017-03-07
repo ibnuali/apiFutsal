@@ -78,27 +78,16 @@ class JoinRoomView(generics.CreateAPIView):
 
 class FriendList(generics.CreateAPIView):
     queryset = Friend.objects.all()
-    serializer_class = FriendListSerializer
+    serializer_class = PlayerFriendListSerializer
 
-class FieldLocList(generics.ListAPIView):
-    queryset = FieldLocation.objects.all()
-    serializer_class = FieldLocSerializer
 
-class FieldList(generics.ListAPIView):
-    queryset = Field.objects.all()
-    serializer_class = FieldSerializer
+class TeamList(generics.ListAPIView):
+    queryset = Team.objects.all()
+    serializer_class = TeamSerializer
 
-class FieldPhotosList(generics.ListAPIView):
-    queryset = FieldPhotos.objects.all()
-    serializer_class = FieldPhotoSerializer
-
-class PartyList(generics.ListAPIView):
-    queryset = Party.objects.all()
-    serializer_class = PartySerializer
-
-class JoinPartyList(generics.ListAPIView):
-    queryset = JoinParty.objects.all()
-    serializer_class = JoinPartySerializer
+class JoinTeamList(generics.ListAPIView):
+    queryset = JoinTeam.objects.all()
+    serializer_class = JoinTeamSerializer
 
 class LevelList(generics.ListAPIView):
     queryset = Level.objects.all()
@@ -123,7 +112,3 @@ class RatingHistoryList(generics.ListAPIView):
 class RequiredPositionsList(generics.ListAPIView):
     queryset = RequiredPositions.objects.all()
     serializer_class = RequiredPositionsSerializer
-
-class StoreList(generics.ListAPIView):
-    queryset = Friend.objects.all()
-    serializer_class = StoreSerializer

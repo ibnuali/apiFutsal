@@ -18,16 +18,12 @@ urlpatterns = [
     url(r'^getroom/(?P<pk>[0-9]+)$', views.RoomDetailView.as_view()),
     url(r'^updateroom/(?P<pk>[0-9]+)$', views.UpdateRoomView.as_view()),
     url(r'^joinroom/$', views.JoinRoomView.as_view()),
-	url(r'^fieldloc/$', views.FieldLocList.as_view()),
-	url(r'^field/$', views.FieldList.as_view()),
-	url(r'^party/$', views.PartyList.as_view()),
-	url(r'^fieldphotos/$', views.FieldPhotosList.as_view()),
-	url(r'^joinparty/$', views.JoinPartyList.as_view()),
+	url(r'^team/$', views.TeamList.as_view()),
+	url(r'^jointeam/$', views.JoinTeamList.as_view()),
 	url(r'^level/$', views.LevelList.as_view()),
 	url(r'^levelhistory/$', views.LevelHistoryList.as_view()),
 	url(r'^ratinghistory/$', views.RatingHistoryList.as_view()),
 	url(r'^requiredposition/$', views.RequiredPositionsList.as_view()),
-	url(r'^store/$', views.StoreList.as_view())
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

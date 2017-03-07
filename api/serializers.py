@@ -121,31 +121,6 @@ class RoomDetailSerializer(serializers.ModelSerializer):
         model = Room
         exclude = ('room_status','room_created','room_updated')
 
-class FriendListSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Friend
-        fields = '__all__'
-
-class FieldSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Field
-        fields = '__all__'
-
-class FieldLocSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FieldLocation
-        fields = '__all__'
-
-class FieldPhotoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = FieldPhotos
-        fields = '__all__'
-
-class FieldSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Field
-        fields = '__all__'
-
 class ListRoomSerializer(serializers.ModelSerializer):
     player = serializers.PrimaryKeyRelatedField(many=True, read_only=True,source='id_player')
     class Meta:
@@ -158,15 +133,15 @@ class ListRoomSerializer(serializers.ModelSerializer):
                     'room_updated'
                  )
 
-class PartySerializer(serializers.ModelSerializer):
+class TeamSerializer(serializers.ModelSerializer):
     id_player = PlayerSerializer()
     class Meta:
-        model = Party
+        model = Team
         fields = '__all__'
 
-class JoinPartySerializer(serializers.ModelSerializer):
+class JoinTeamSerializer(serializers.ModelSerializer):
     class Meta:
-        model = JoinParty
+        model = JoinTeam
         fields = '__all__'
 
 
@@ -202,7 +177,3 @@ class RequiredPositionsSerializer(serializers.ModelSerializer):
         model = RequiredPositions
         fields = '__all__'
 
-class StoreSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Store
-        fields = '__all__'
