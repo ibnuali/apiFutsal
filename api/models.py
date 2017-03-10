@@ -8,6 +8,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Count
 
 
 class Adds(models.Model):
@@ -406,8 +407,10 @@ class Player(models.Model):
                                               ON l.id_level = lm.id_level
                                               AND lm.id_player = %s
                                               ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
-
-        return level_hist[0].score_level
+        if not sum(1 for level in level_hist):
+            return 0
+        else:
+            return level_hist[0].score_level
 
     #Method untuk ngambil data exp seorang pemain
     def __player_exp(self):
@@ -421,35 +424,35 @@ class Player(models.Model):
                                               FROM level) l
                                               ON l.id_level = lm.id_level
                                               AND lm.id_player = %s
-                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate''',[self.id_player,self.id_player])
+                                              ) lm ON lh.id_player = %s AND lh.date_level_history = lm.MaxDate LIMIT 1''',[self.id_player,self.id_player])
 
-        return level_hist[0].player_exp
+        if not sum(1 for level in level_hist):
+            return 0
+        else:
+            return level_hist[0].player_exp
 
     #Method untuk ngambil data rating seorang pemain
     def __player_rating(self):
-        rating = RatingHistory.objects.raw('''SELECT *,SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review,
-                                              FROM rating_history rh, rating r,rating_category
-                                              WHERE rh.id_player = %s AND rh.id_rating = r.id_rating''',[self.id_player])
-        '''
-            SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+        rating_hist = RatingHistory.objects.raw('''
+            SELECT *,SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
                                               FROM rating_history rh, rating r,rating_category rc
-                                              WHERE rh.id_rating = r.id_rating AND rh.short_rating_category = rc.short_rating_category GROUP BY short_rating_category
-                                              '''
-        print(rating[0].score)
-        if (rating[0].review-1) != 0:
-            return rating[0].score/(rating[0].review-1)
-        else:
-            return rating[0].score
+                                              WHERE rh.id_rating = %s AND rh.short_rating_category = rc.short_rating_category GROUP BY rc.short_rating_category
+                                              ''',[self.id_player])
 
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
     #Method untuk ngambil data total orang yang meriview seorang pemain
     def __player_reviewed(self):
         rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
-        return rating_hist["id_rating_history__count"]-1
+        return rating_hist["id_rating_history__count"]
 
     #Method untuk ngambil data posisi seorang pemain
     def __player_positions(self):
-        in_query = PlayerPosition.objects.filter(id_player = self.id_player).values('id_position')
-        positions = Positions.objects.filter(id_position__in = in_query)
+        in_query = PlayerPosition.objects.filter(id_player = self.id_player).values('short_position')
+        positions = Positions.objects.filter(short_position__in = in_query)
         return positions
 
     #Method untuk ngambil data rooms dimana pemain tersebut menjadi admin di room tersebut

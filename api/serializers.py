@@ -176,4 +176,3 @@ class RequiredPositionsSerializer(serializers.ModelSerializer):
     class Meta:
         model = RequiredPositions
         fields = '__all__'
-
