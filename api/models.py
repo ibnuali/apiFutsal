@@ -8,7 +8,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-from django.db.models import Count
 
 
 class Adds(models.Model):
@@ -394,7 +393,8 @@ class Player(models.Model):
     created_at = models.DateTimeField()
     updated_at = models.DateTimeField(blank=True, null=True)
 
-    #Method untuk ngambil data level seorang pemain
+
+        #Method untuk ngambil data level seorang pemain
     def __player_level(self):
         level_hist = LevelHistory.objects.raw('''SELECT *
                                               FROM level_history lh
@@ -431,12 +431,13 @@ class Player(models.Model):
         else:
             return level_hist[0].player_exp
 
-    #Method untuk ngambil data rating seorang pemain
-    def __player_rating(self):
+    #Method untuk ngambil data DEF rating seorang pemain
+    def __ratingDEF_byPlayer(self):
         rating_hist = RatingHistory.objects.raw('''
-            SELECT *,SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
-                                              FROM rating_history rh, rating r,rating_category rc
-                                              WHERE rh.id_rating = %s AND rh.short_rating_category = rc.short_rating_category GROUP BY rc.short_rating_category
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='DEF' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
                                               ''',[self.id_player])
 
 
@@ -444,6 +445,174 @@ class Player(models.Model):
             return 0
         else:
             return rating_hist[0]
+
+    #Method untuk ngambil data SHOOT rating seorang pemain
+    def __ratingSHT_byPlayer(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='SHT' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+    #Method untuk ngambil data SPEED rating seorang pemain
+    def __ratingSHT_byPlayer(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='SPD' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+
+    #Method untuk ngambil data SPEED rating seorang pemain
+    def __ratingSHT_byPlayer(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='DRI' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+    def __ratingPAS_byPlayer(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='PAS' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+
+    def __ratingPHY_byPlayer(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='PHY' AND rh.id_expert_judgement IS NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+            # EXPERT JUDGMENT
+
+  #Method untuk ngambil data DEF rating seorang EXPERT JUDGMENT
+    def __ratingDEF_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='DEF' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+    #Method untuk ngambil data SHOOT rating seorang EXPERT JUDGMENT
+    def __ratingSHT_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='SHT' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+    #Method untuk ngambil data SPEED rating seorang EXPERT JUDGMENT
+    def __ratingSHT_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='SPD' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+
+    #Method untuk ngambil data SPEED rating seorang EXPERT JUDGMENT
+    def __ratingSHT_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='DRI' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+    def __ratingPAS_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='PAS' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
+
+    def __ratingPHY_byExprtJudg(self):
+        rating_hist = RatingHistory.objects.raw('''
+                                                SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
+                                               FROM rating_history rh, rating r,rating_category rc,player
+                                               WHERE rh.id_player = %s AND rh.id_rating=r.id_rating AND rh.id_player= player.id_player AND rh.short_rating_category = rc.short_rating_category 
+                                               AND rh.short_rating_category='PHY' AND rh.id_expert_judgement IS NOT NULL GROUP BY short_rating_category
+                                              ''',[self.id_player])
+
+
+        if not sum(1 for rating in rating_hist):
+            return 0
+        else:
+            return rating_hist[0]
+
     #Method untuk ngambil data total orang yang meriview seorang pemain
     def __player_reviewed(self):
         rating_hist = RatingHistory.objects.filter(id_player = self.id_player).aggregate(Count('id_rating_history'))
@@ -480,14 +649,27 @@ class Player(models.Model):
     player_rooms = property(__player_rooms)
     player_friends = property(__player_friends)
 
+    player_drible = property(__ratingDRI_byPlayer)
+    player_shoot = property(__ratingSHT_byPlayer)
+    player_physic = property(__ratingPHY_byPlayer)
+    player_passing = property(__ratingPAS_byPlayer)
+    player_speed =  property(__ratingSPD_byPlayer)
+    player_defance = property(__ratingDEF_byPlayer)
+
+    player_drible = property(__ratingDRI_byExprtJudg)
+    player_shoot = property(__ratingSHT_byExprtJudg)
+    player_physic = property(__ratingPHY_byExprtJudg)
+    player_passing = property(__ratingPAS_byExprtJudg)
+    player_speed =  property(__ratingSPD_byExprtJudg)
+    player_defance = property(__ratingDEF_byExprtJudg)
     def SignIn(username, password):
         queryset = Player.objects.filter(player_username=username).filter(player_password=password)
         return queryset
 
-
     class Meta:
         managed = False
         db_table = 'player'
+
 
 class PlayerAchievement(models.Model):
     id_player_achievement = models.AutoField(primary_key=True)
@@ -591,7 +773,6 @@ class RatingHistory(models.Model):
     id_rating_history = models.AutoField(primary_key=True)
     id_player = models.ForeignKey(Player, models.DO_NOTHING, db_column='id_player',related_name='id_playerRating')
     player_give_rating = models.ForeignKey(Player, models.DO_NOTHING, db_column='player_give_rating',related_name='player_give_rating')
-    id_expert_judgement = models.ForeignKey(ExpertJudgement, models.DO_NOTHING, db_column='id_expert_judgement', blank=True, null=True)
     short_rating_category = models.ForeignKey(RatingCategory, models.DO_NOTHING, db_column='short_rating_category')
     id_rating = models.ForeignKey(Rating, models.DO_NOTHING, db_column='id_rating')
     date_rating_history = models.DateTimeField()
