@@ -462,7 +462,7 @@ class Player(models.Model):
             return rating_hist[0]
 
     #Method untuk ngambil data SPEED rating seorang pemain
-    def __ratingSHT_byPlayer(self):
+    def __ratingSPD_byPlayer(self):
         rating_hist = RatingHistory.objects.raw('''
                                                 SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
                                                FROM rating_history rh, rating r,rating_category rc,player
@@ -478,7 +478,7 @@ class Player(models.Model):
 
 
     #Method untuk ngambil data SPEED rating seorang pemain
-    def __ratingSHT_byPlayer(self):
+    def __ratingDRI_byPlayer(self):
         rating_hist = RatingHistory.objects.raw('''
                                                 SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
                                                FROM rating_history rh, rating r,rating_category rc,player
@@ -554,7 +554,7 @@ class Player(models.Model):
             return rating_hist[0]
 
     #Method untuk ngambil data SPEED rating seorang EXPERT JUDGMENT
-    def __ratingSHT_byExprtJudg(self):
+    def __ratingSPD_byExprtJudg(self):
         rating_hist = RatingHistory.objects.raw('''
                                                 SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
                                                FROM rating_history rh, rating r,rating_category rc,player
@@ -570,7 +570,7 @@ class Player(models.Model):
 
 
     #Method untuk ngambil data SPEED rating seorang EXPERT JUDGMENT
-    def __ratingSHT_byExprtJudg(self):
+    def __ratingDRI_byExprtJudg(self):
         rating_hist = RatingHistory.objects.raw('''
                                                 SELECT SUM(r.score_rating) as score, COUNT(rh.id_rating_history) as review, rh.short_rating_category
                                                FROM rating_history rh, rating r,rating_category rc,player
@@ -642,7 +642,7 @@ class Player(models.Model):
     #definisi properti dan method yang ditampungnya
     player_level = property(__player_level)
     player_exp = property(__player_exp)
-    player_rating = property(__player_rating)
+
     player_reviewed = property(__player_reviewed)
     player_positions = property(__player_positions)
     player_join_rooms = property(__player_join_rooms)
