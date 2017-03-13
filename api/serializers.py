@@ -93,8 +93,10 @@ class PlayerDetailSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id_player','player_first_name','player_last_name','player_gender','player_photo',
         'player_birth_place','player_birth_date','player_address','id_district','player_handphone',
-        'player_email','player_username','player_level','player_exp','player_rating','player_reviewed','player_positions',
-        'player_rooms','player_join_rooms','player_friends')
+        'player_email','player_username','player_level','player_exp','player_reviewed','player_positions',
+        'player_rooms','player_join_rooms','player_friends','rating_PAS_byplayer','rating_SHT_byplayer',
+        'rating_PHY_byplayer', 'rating_DEF_byplayer', 'rating_SPD_byplayer', 'rating_DRI_byplayer','rating_PAS_byexpert','rating_SHT_byexpert',
+        'rating_PHY_byexpert', 'rating_DEF_byexpert', 'rating_SPD_byexpert', 'rating_DRI_byexpert')
 
 class PlayerRoomSerializer(serializers.ModelSerializer):
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)
