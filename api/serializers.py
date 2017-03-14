@@ -55,11 +55,6 @@ class PlayerDataSerializer(serializers.ModelSerializer):
         model = Player
         exclude = ('created_at','updated_at')
 
-class ChatFriendSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Chat
-        exclude = ('id_player','id_room','id_party')
-
 class PlayerFriendDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
@@ -72,31 +67,21 @@ class PlayerFriendListSerializer(serializers.ModelSerializer):
         model = Friend
         exclude = ('id_player1','friend_status')
 
-class PlayerRoomSerializer(serializers.ModelSerializer):
+class PlayerAchievementList(serializers.ModelSerializer):
     class Meta:
-        model = Room
-        fields = ('id_field_location','room_name','room_stadium',
-                    'room_address','room_duration','room_date')
-
-class PlayerJoinRoomSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = JoinRoom
-        fields = ('id_join_room','date_join_room','id_room')
+        model = PlayerAchievement
+        fields = ('id_player_achievement','name_event_player_achievement','date_player_achievement')
 
 class PlayerDetailSerializer(serializers.ModelSerializer):
-    player_gender = GenderSerializer(read_only=True,source='id_gender')
     player_friends = PlayerFriendListSerializer(many=True,read_only=True)
-    player_rooms = PlayerRoomSerializer(many=True,read_only=True)
-    player_join_rooms = PlayerJoinRoomSerializer(many=True,read_only=True)
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)
+    player_achievements = PlayerAchievementList(many=True,read_only=True)
     class Meta:
         model = Player
-        fields = ('id_player','player_first_name','player_last_name','player_gender','player_photo',
+        fields = ('id_player','player_first_name','player_last_name','gender','player_photo',
         'player_birth_place','player_birth_date','player_address','id_district','player_handphone',
-        'player_email','player_username','player_level','player_exp','player_reviewed','player_positions',
-        'player_rooms','player_join_rooms','player_friends','rating_PAS_byplayer','rating_SHT_byplayer',
-        'rating_PHY_byplayer', 'rating_DEF_byplayer', 'rating_SPD_byplayer', 'rating_DRI_byplayer','rating_PAS_byexpert','rating_SHT_byexpert',
-        'rating_PHY_byexpert', 'rating_DEF_byexpert', 'rating_SPD_byexpert', 'rating_DRI_byexpert')
+        'player_email','player_username','player_level','player_exp','player_positions'
+        ,'player_friends','rating_byPlayer','rating_byExpert','player_achievements')
 
 class PlayerRoomSerializer(serializers.ModelSerializer):
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)

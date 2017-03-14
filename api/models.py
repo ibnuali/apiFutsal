@@ -425,63 +425,44 @@ class Player(models.Model):
             return level_hist[0].player_exp
 
     #Method untuk ngambil data DEF rating seorang pemain
-    def __rating_Player(self, arg, expert, give_rating):
-        in_query = RatingHistory.objects.filter(id_player = self.id_player).filter(short_rating_category = arg).filter(id_expert_judgement__isnull = expert).filter(player_give_rating__isnull = give_rating).values('id_rating')
-        score = Rating.objects.filter(id_rating__in = in_query).aggregate(Sum('score_rating'))
+    def __rating_Player(self, expert, give_rating):
+        in_query = RatingHistory.objects.filter(id_player = self.id_player).filter(id_expert_judgement__isnull = expert).filter(player_give_rating__isnull = give_rating)
         review = in_query.aggregate(Count('id_rating_history'))
-        if score["score_rating__sum"] is None:
-            return 0
+        scores_PAS = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'PAS').values('id_rating')).aggregate(Sum('score_rating'))
+        scores_SHT = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'SHT').values('id_rating')).aggregate(Sum('score_rating'))
+        scores_DEF = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'DEF').values('id_rating')).aggregate(Sum('score_rating'))
+        scores_PHY = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'PHY').values('id_rating')).aggregate(Sum('score_rating'))
+        scores_SPD = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'SPD').values('id_rating')).aggregate(Sum('score_rating'))
+        scores_DRI = Rating.objects.filter(id_rating__in = in_query.filter(short_rating_category = 'DRI').values('id_rating')).aggregate(Sum('score_rating'))
+        if review['id_rating_history__count'] == 0:
+            return {
+                    'PAS': 0,
+                    'SHT': 0,
+                    'DEF': 0,
+                    'PHY': 0,
+                    'SPD': 0,
+                    'DRI': 0,
+                    'review' : 0
+                    }
         else:
-            return score["score_rating__sum"]/review["id_rating_history__count"]
+            return {
+                    'PAS': scores_PAS['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'SHT': scores_SHT['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'DEF': scores_DEF['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'PHY': scores_PHY['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'SPD': scores_SPD['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'DRI': scores_DRI['score_rating__sum']/(review['id_rating_history__count'] / 6),
+                    'review': review['id_rating_history__count'] / 6
+                    }
 
     #Method untuk ngambil data PAS,SHOOT,DRI,DEF,PHY,SPEED, rating seorang pemain
-    def __ratingPAS_byPlayer(self):
-        score_rating = self.__rating_Player('PAS',True,False)
+    def __rating_byPlayer(self):
+        score_rating = self.__rating_Player(True,False)
         return score_rating
 
-    def __ratingSHT_byPlayer(self):
-        score_rating = self.__rating_Player('SHT',True,False)
-        return score_rating
-
-    def __ratingPHY_byPlayer(self):
-        score_rating = self.__rating_Player('DEF',True,False)
-        return score_rating
-
-    def __ratingDEF_byPlayer(self):
-        score_rating = self.__rating_Player('DEF',True,False)
-        return score_rating
-
-    def __ratingSPD_byPlayer(self):
-        score_rating = self.__rating_Player('SPD',True,False)
-        return score_rating
-
-    def __ratingDRI_byPlayer(self):
-        score_rating = self.__rating_Player('DRI',True,False)
-        return score_rating
-
-    #Method untuk ngambil data PAS,SHOOT,DRI,DEF,PHY,SPEED, rating seorang pemain dari expert
-    def __ratingPAS_byExpert(self):
-        score_rating = self.__rating_Player('PAS',False,True)
-        return score_rating
-
-    def __ratingSHT_byExpert(self):
-        score_rating = self.__rating_Player('SHT',False,True)
-        return score_rating
-
-    def __ratingPHY_byExpert(self):
-        score_rating = self.__rating_Player('DEF',False,True)
-        return score_rating
-
-    def __ratingDEF_byExpert(self):
-        score_rating = self.__rating_Player('DEF',False,True)
-        return score_rating
-
-    def __ratingSPD_byExpert(self):
-        score_rating = self.__rating_Player('SPD',False,True)
-        return score_rating
-
-    def __ratingDRI_byExpert(self):
-        score_rating = self.__rating_Player('DRI',False,True)
+    #Method untuk ngambil data PAS,SHOOT,DRI,DEF,PHY,SPEED, rating seorang pemain
+    def __rating_byExpert(self):
+        score_rating = self.__rating_Player(False,True)
         return score_rating
 
     #Method untuk ngambil data total orang yang meriview seorang pemain
@@ -495,41 +476,24 @@ class Player(models.Model):
         positions = Positions.objects.filter(short_position__in = in_query)
         return positions
 
-    #Method untuk ngambil data rooms dimana pemain tersebut menjadi admin di room tersebut
-    def __player_rooms(self):
-        rooms = Room.objects.filter(id_player = self.id_player)
-        return rooms
-
-    #Method untuk ngambil data rooms dimana pemain tersebut bergabung di room tersebut
-    def __player_join_rooms(self):
-        join_rooms = JoinRoom.objects.filter(id_player = self.id_player)
-        return join_rooms
-
     #Method untuk ngambil data teman dari seorang pemain
     def __player_friends(self):
         friend = Friend.objects.filter(id_player1 = self.id_player)
         return friend
 
+    #Method untuk ngambil data teman dari seorang pemain
+    def __player_achievements(self):
+        achievements = PlayerAchievement.objects.filter(id_player = self.id_player)
+        return achievements
+
     #definisi properti dan method yang ditampungnya
     player_level = property(__player_level)
     player_exp = property(__player_exp)
-    rating_PAS_byplayer = property(__ratingPAS_byPlayer)
-    rating_SHT_byplayer = property(__ratingSHT_byPlayer)
-    rating_PHY_byplayer = property(__ratingPHY_byPlayer)
-    rating_DEF_byplayer = property(__ratingDEF_byPlayer)
-    rating_SPD_byplayer = property(__ratingSPD_byPlayer)
-    rating_DRI_byplayer = property(__ratingDRI_byPlayer)
-    rating_PAS_byexpert = property(__ratingPAS_byExpert)
-    rating_SHT_byexpert = property(__ratingSHT_byExpert)
-    rating_PHY_byexpert = property(__ratingPHY_byExpert)
-    rating_DEF_byexpert = property(__ratingDEF_byExpert)
-    rating_SPD_byexpert = property(__ratingSPD_byExpert)
-    rating_DRI_byexpert = property(__ratingDRI_byExpert)
-    player_reviewed = property(__player_reviewed)
+    rating_byPlayer = property(__rating_byPlayer)
+    rating_byExpert = property(__rating_byExpert)
     player_positions = property(__player_positions)
-    player_join_rooms = property(__player_join_rooms)
-    player_rooms = property(__player_rooms)
     player_friends = property(__player_friends)
+    player_achievements = property(__player_achievements)
 
 
 
