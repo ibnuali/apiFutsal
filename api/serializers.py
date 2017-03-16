@@ -34,7 +34,7 @@ class PositionsSerializer(serializers.ModelSerializer):
 class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        exclude = ('id_district','player_address','created_at','updated_at')
+        exclude = ('id_district','player_address','player_nick_name','created_at','updated_at')
 
 class PlayerPositionListSerializer(serializers.ModelSerializer):
     class Meta:
