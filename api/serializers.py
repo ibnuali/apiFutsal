@@ -34,7 +34,7 @@ class PositionsSerializer(serializers.ModelSerializer):
 class SignupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Player
-        exclude = ('id_district','player_photo','player_address','created_at','updated_at')
+        exclude = ('id_district','player_address','created_at','updated_at')
 
 class PlayerPositionListSerializer(serializers.ModelSerializer):
     class Meta:
@@ -67,21 +67,39 @@ class PlayerFriendListSerializer(serializers.ModelSerializer):
         model = Friend
         exclude = ('id_player1','friend_status')
 
-class PlayerAchievementList(serializers.ModelSerializer):
+class PlayerAchievementListSerializer(serializers.ModelSerializer):
     class Meta:
         model = PlayerAchievement
         fields = ('id_player_achievement','name_event_player_achievement','date_player_achievement')
 
+class TeamListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Team
+        exclude = ('id_city','team_established','team_created','team_update')
+
+class PlayerTeamListSerializer(serializers.ModelSerializer):
+    team = TeamListSerializer(read_only=True,source= 'id_team')
+    class Meta:
+        model = JoinTeam
+        fields = ('id_join_team','team','official_team_status')
+
+class PlayerScheduleSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Schedule
+        fields = '__all__'
+
 class PlayerDetailSerializer(serializers.ModelSerializer):
     player_friends = PlayerFriendListSerializer(many=True,read_only=True)
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)
-    player_achievements = PlayerAchievementList(many=True,read_only=True)
+    player_achievements = PlayerAchievementListSerializer(many=True,read_only=True)
+    player_team = PlayerTeamListSerializer(many=True,read_only=True)
+    player_schedule = PlayerScheduleSerializer(many=True,read_only=True)
     class Meta:
         model = Player
         fields = ('id_player','player_first_name','player_last_name','gender','player_photo',
         'player_birth_place','player_birth_date','player_address','id_district','player_handphone',
         'player_email','player_username','player_level','player_exp','player_positions'
-        ,'player_friends','rating_byPlayer','rating_byExpert','player_achievements')
+        ,'player_friends','rating_byPlayer','rating_byExpert','player_achievements','player_team','player_schedule')
 
 class PlayerRoomSerializer(serializers.ModelSerializer):
     player_positions = PlayerPositionListSerializer(many=True,read_only=True)

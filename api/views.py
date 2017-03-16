@@ -17,11 +17,11 @@ class ProvinceListView(generics.ListAPIView):
     queryset = Province.objects.all()
     serializer_class = ProvinceSerializer
 
-class CreatePlayerView(views.APIView):
+class SignUpPlayerView(views.APIView):
     def post(self, request):
         serializer = SignupSerializer(data=request.data) #input serializer
         if serializer.is_valid():
-            player = serializer.save(created_at=timezone.now(),player_photo="urldefault")
+            player = serializer.save(created_at=timezone.now())
             output_serializer = PlayerDetailSerializer(player) #output serializer
             return Response(output_serializer.data)
         else:

@@ -8,7 +8,7 @@ urlpatterns = [
     url(r'^city/$', views.CityListView.as_view()),
 	url(r'^country/$', views.CountryListView.as_view()),
 	url(r'^province/$', views.ProvinceListView.as_view()),
-	url(r'^signup/$', views.CreatePlayerView.as_view()),
+	url(r'^signup/$', views.SignUpPlayerView.as_view()),
 	url(r'^editprofile/(?P<pk>[0-9]+)$', views.UpdatePlayerView.as_view()),
     url(r'^signin/(?P<username>.+)/(?P<password>.+)/$', views.SignInPlayerView.as_view()),
     url(r'^getplayerbyid/(?P<pk>.+)/$', views.GetPlayerByIdView.as_view()),

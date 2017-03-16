@@ -9,6 +9,9 @@ from __future__ import unicode_literals
 
 from django.db import models
 from django.db.models import *
+from django.utils import timezone
+from json import dumps
+from django.forms.models import model_to_dict
 
 
 class Adds(models.Model):
@@ -242,7 +245,8 @@ class JoinTeam(models.Model):
     id_team = models.ForeignKey('Team', models.DO_NOTHING, db_column='id_team')
     id_player = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player')
     date_join_team = models.DateTimeField()
-    join_team_status = models.IntegerField()
+    official_team_status = models.IntegerField()
+    date_official_team = models.DateTimeField()
 
     class Meta:
         managed = False
@@ -325,17 +329,6 @@ class MatchTeam(models.Model):
         db_table = 'match_team'
 
 
-class OfficialTeam(models.Model):
-    id_official_team = models.AutoField(primary_key=True)
-    id_player = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player')
-    id_team = models.ForeignKey('Team', models.DO_NOTHING, db_column='id_team')
-    date_official_team = models.DateTimeField()
-
-    class Meta:
-        managed = False
-        db_table = 'official_team'
-
-
 class OfficialTournament(models.Model):
     id_official_tournament = models.AutoField(primary_key=True)
     id_player = models.ForeignKey('Player', models.DO_NOTHING, db_column='id_player')
@@ -375,6 +368,11 @@ class PlayMatch(models.Model):
         managed = False
         db_table = 'play_match'
 
+class Schedule(models.Model): #class untuk schedule
+    id_schedule = models.IntegerField()
+    name_schedule = models.CharField(max_length=50)
+    date_schedule = models.DateTimeField()
+    status_schedule = models.CharField(max_length=10)
 
 class Player(models.Model):
     id_player = models.AutoField(primary_key=True)
@@ -455,6 +453,22 @@ class Player(models.Model):
                     'review': review['id_rating_history__count'] / 6
                     }
 
+    #Method untuk mengambil schedule
+    def __player_schedule(self):
+        waktu_sekarang = timezone.now()
+        room = Room.objects.filter(id_player = self.id_player).filter(room_date__gt = waktu_sekarang)
+        join_room = Room.objects.filter(id_room__in = JoinRoom.objects.filter(id_player = self.id_player).values('id_room')).filter(room_date__gt = waktu_sekarang)
+        list_schedule = []
+        for a in room:
+            schedule = Schedule(id_schedule = a.id_room, name_schedule = a.room_name, date_schedule = a.room_date, status_schedule = 'room')
+            list_schedule.append(schedule)
+        for a in join_room:
+            schedule = Schedule(id_schedule = a.id_room, name_schedule = a.room_name, date_schedule = a.room_date, status_schedule = 'room')
+            list_schedule.append(schedule)
+
+        return list_schedule
+
+
     #Method untuk ngambil data PAS,SHOOT,DRI,DEF,PHY,SPEED, rating seorang pemain
     def __rating_byPlayer(self):
         score_rating = self.__rating_Player(True,False)
@@ -486,6 +500,13 @@ class Player(models.Model):
         achievements = PlayerAchievement.objects.filter(id_player = self.id_player)
         return achievements
 
+    #Method untuk mengambil data team
+    def __player_team(self):
+        jointeam = JoinTeam.objects.filter(id_player = self.id_player)
+        return jointeam
+
+
+
     #definisi properti dan method yang ditampungnya
     player_level = property(__player_level)
     player_exp = property(__player_exp)
@@ -494,6 +515,8 @@ class Player(models.Model):
     player_positions = property(__player_positions)
     player_friends = property(__player_friends)
     player_achievements = property(__player_achievements)
+    player_team = property(__player_team)
+    player_schedule = property(__player_schedule)
 
 
 
