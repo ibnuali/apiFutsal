@@ -680,6 +680,10 @@ class Room(models.Model):
         managed = False
         db_table = 'room'
 
+    
+        ''' DRAFT QUERY ROOM
+            SELECT COUNT(f.id_friend ) FROM friend f,player p WHERE f.id_player1=p.id_player GROUP BY f.id_player1
+            '''
 
 class Team(models.Model):
     id_team = models.AutoField(primary_key=True)
