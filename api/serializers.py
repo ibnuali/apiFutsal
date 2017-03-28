@@ -48,7 +48,7 @@ class PlayerSerializer(serializers.ModelSerializer):
         model = Player
         fields = ('id_player','player_first_name','player_last_name','player_username','player_gender','player_birth_place',
         'player_birth_date','player_photo','player_address','player_email','player_handphone',
-        'player_level','player_exp','player_rating','player_reviewed','player_positions',)
+        'player_level','player_exp','rating_byPlayer','rating_byExpert','player_positions',)
 
 class PlayerDataSerializer(serializers.ModelSerializer):
     class Meta:
