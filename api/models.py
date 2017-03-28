@@ -523,7 +523,10 @@ class Player(models.Model):
     #method untuk sign in
     def SignIn(username, password):
         queryset = Player.objects.filter(player_username=username).filter(player_password=password)
-        return queryset
+        if queryset is None:
+            return {"Data is Not Found"}
+        else:
+            return queryset
 
     class Meta:
         managed = False
